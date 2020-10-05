@@ -9,17 +9,24 @@ import TextField from '@material-ui/core/TextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
+import { RootState } from '../../store';
+
+interface EditCardDialogProperties {
+  cardId: string;
+  open: boolean;
+  onClose: () => void;
+}
 
 const selectCards = (state: RootState) => {
   const selectedBoardId = state.app.selectedBoard;
   return state.boards.byId[selectedBoardId].cards;
 };
 
-export default function EditCardDialog(props) {
+export default function EditCardDialog(props: EditCardDialogProperties) {
   const dispatch = useDispatch();
   const cards = useSelector(selectCards);
   const { cardId, open, onClose } = props;
-  const theCard = cards.find(card => card.id === cardId);
+  const theCard = cards.find((card) => card.id === cardId);
 
   const [title, setTitle] = React.useState(theCard.title);
   const [titleError, setTitleError] = React.useState(false);
@@ -41,7 +48,7 @@ export default function EditCardDialog(props) {
   const performUpdate = (event) => {
     event.preventDefault();
     if (!isBlank(title)) {
-      dispatch(updateCard({cardId, title, description}));
+      dispatch(updateCard({ cardId, title, description }));
       onClose();
     } else {
       setTitleError(true);
@@ -49,7 +56,12 @@ export default function EditCardDialog(props) {
   };
 
   return (
-    <Dialog open={open} aria-labelledby="form-dialog-title" fullWidth onClose={onClose}>
+    <Dialog
+      open={open}
+      aria-labelledby="form-dialog-title"
+      fullWidth
+      onClose={onClose}
+    >
       <form onSubmit={performUpdate}>
         <DialogTitle id="form-dialog-title">Edit card</DialogTitle>
         <DialogContent>
@@ -63,6 +75,7 @@ export default function EditCardDialog(props) {
               onChange={titleChanged}
               value={title}
               error={titleError}
+              required
               helperText="Card title can't be empty"
             />
           </div>

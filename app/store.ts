@@ -19,7 +19,7 @@ const shouldIncludeLogger = !excludeLoggerEnvs.includes(
   process.env.NODE_ENV || ''
 );
 
-const selectedBoardMiddleware = store => next => action => {
+const selectedBoardMiddleware = (store) => (next) => (action) => {
   action.selectedBoard = store.getState().app.selectedBoard;
   return next(action);
 };
@@ -34,7 +34,10 @@ if (shouldIncludeLogger) {
   middleware.push(logger);
 }
 
-export const configuredStore = (initialState?: RootState, appDataFolder: string) => {
+export const configuredStore = (
+  appDataFolder: string,
+  initialState?: RootState
+) => {
   // Create Store
   const persisterMiddleware = createPersister(appDataFolder);
   middleware.push(persisterMiddleware);

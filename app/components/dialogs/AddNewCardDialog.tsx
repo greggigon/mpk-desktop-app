@@ -9,21 +9,25 @@ import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import PropTypes, { InferProps } from 'prop-types';
 
 import { useDispatch } from 'react-redux';
 import { addCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 
-export default function AddNewCardDialog(props) {
-  const { selectedColumn, onClose, onAdd } = props;
-  const [open, setOpen] = React.useState(false);
-  const [addAtTheTop, setAddAtTheTop] = React.useState(true);
-  const [title, setTitle] = React.useState();
-  const [titleError, setTitleError] = React.useState(false);
-  const [description, setDescription] = React.useState();
+export default function AddNewCardDialog(
+  props: InferProps<typeof AddNewCardDialog.propTypes>
+) {
   const dispatch = useDispatch();
 
-  if (selectedColumn != null && !open) {
+  const { onClose, onAdd, columnId, columnTitle } = props;
+  const [open, setOpen] = React.useState(false);
+  const [addAtTheTop, setAddAtTheTop] = React.useState(true);
+  const [title, setTitle] = React.useState<string>();
+  const [titleError, setTitleError] = React.useState(false);
+  const [description, setDescription] = React.useState<string>();
+
+  if (columnId != null && !open) {
     setOpen(true);
   }
 
@@ -38,7 +42,12 @@ export default function AddNewCardDialog(props) {
     event.preventDefault();
     if (!isBlank(title)) {
       dispatch(
-        addCard({ title, description, columnId: selectedColumn.id, addAtTheTop })
+        addCard({
+          title,
+          description,
+          columnId,
+          addAtTheTop,
+        })
       );
       setOpen(false);
       onAdd();
@@ -61,7 +70,7 @@ export default function AddNewCardDialog(props) {
     setDescription(event.target.value);
   };
 
-  if (selectedColumn) {
+  if (columnId) {
     const theSwitch = (
       <Switch
         checked={addAtTheTop}
@@ -70,11 +79,16 @@ export default function AddNewCardDialog(props) {
       />
     );
     return (
-      <Dialog open={open} aria-labelledby="form-dialog-title" fullWidth onClose={handleCancel}>
+      <Dialog
+        open={open}
+        aria-labelledby="form-dialog-title"
+        fullWidth
+        onClose={handleCancel}
+      >
         <form onSubmit={handleAddCard}>
           <DialogTitle id="form-dialog-title">
             Add new card to Column:
-            <strong>{selectedColumn.title}</strong>
+            <strong>{columnTitle}</strong>
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -90,7 +104,7 @@ export default function AddNewCardDialog(props) {
                 helperText="Card title can't be empty"
                 required
                 onChange={titleChanged}
-                inputRef={input => input && input.focus()}
+                autoFocus
               />
             </div>
             <div style={{ marginTop: '10px' }}>
@@ -122,8 +136,13 @@ export default function AddNewCardDialog(props) {
         </form>
       </Dialog>
     );
-  } else {
-
-    return <span />;
   }
+  return null;
 }
+
+AddNewCardDialog.propTypes = {
+  columnId: PropTypes.string.isRequired,
+  columnTitle: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
+};

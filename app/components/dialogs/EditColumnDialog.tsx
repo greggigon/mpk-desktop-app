@@ -10,7 +10,14 @@ import { useDispatch } from 'react-redux';
 import { updateColumn } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 
-export default function EditColumnDialog(props) {
+interface EditColumnDialogProperties {
+  columnId: string;
+  title: string;
+  open: () => void;
+  onClose: () => void;
+}
+
+export default function EditColumnDialog(props: EditColumnDialogProperties) {
   const dispatch = useDispatch();
   const { columnId, title, open, onClose } = props;
 
@@ -26,37 +33,46 @@ export default function EditColumnDialog(props) {
     setColumnTitle(event.target.value);
   };
 
-  const performUpdate = () => {
-    dispatch(updateColumn({columnId, title: columnTitle}));
+  const performUpdate = (event) => {
+    event.preventDefault();
+    dispatch(updateColumn({ columnId, title: columnTitle }));
     onClose();
   };
 
   return (
-    <Dialog open={open} aria-labelledby="form-dialog-title" fullWidth>
-      <DialogTitle id="form-dialog-title">Edit column</DialogTitle>
-      <DialogContent>
-        <DialogContentText>Edit column details.</DialogContentText>
-        <div style={{ marginTop: '10px' }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Column title"
-            label="Title"
-            helperText="Column title can't be empty"
-            onChange={titleChanged}
-            value={columnTitle}
-            error={titleError}
-          />
-        </div>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={performUpdate} color="primary">
-          Update
-        </Button>
-      </DialogActions>
+    <Dialog
+      open={open}
+      aria-labelledby="form-dialog-title"
+      fullWidth
+      onClose={onClose}
+    >
+      <form onSubmit={performUpdate}>
+        <DialogTitle id="form-dialog-title">Edit column</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Edit column details.</DialogContentText>
+          <div style={{ marginTop: '10px' }}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Column title"
+              label="Title"
+              helperText="Column title can't be empty"
+              required
+              onChange={titleChanged}
+              value={columnTitle}
+              error={titleError}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="primary">
+            Cancel
+          </Button>
+          <Button type="submit" color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

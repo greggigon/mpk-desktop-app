@@ -10,8 +10,15 @@ import styles from './Card.css';
 import { deleteCard } from '../features/board/boardSlice';
 import EditCardDialog from './dialogs/EditCardDialog';
 
-export default function KanbanCard(props) {
-  const { id, title, index } = props;
+interface KanbanCardProptries {
+  id: string;
+  title: string;
+  index: number;
+  hasArchive: boolean;
+}
+
+export default function KanbanCard(props: KanbanCardProptries) {
+  const { id, title, index, hasArchive } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [editCardDialogOpen, setEditCardDialogOpen] = React.useState(false);
   const open = Boolean(anchorEl);
@@ -64,6 +71,7 @@ export default function KanbanCard(props) {
                 onClose={closeMenu}
               >
                 <MenuItem onClick={editCard}>Edit</MenuItem>
+                {hasArchive && <MenuItem>Archive</MenuItem>}
                 <MenuItem onClick={removeCard}>Delete</MenuItem>
               </Menu>
             </div>

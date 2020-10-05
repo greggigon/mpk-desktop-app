@@ -8,18 +8,30 @@ import styles from './Column.css';
 import Card from './Card';
 import EditColumnDialog from './dialogs/EditColumnDialog';
 
-export default function Column(props) {
-  const { title, cards, id, index } = props;
+interface Card {
+  id: string;
+}
+
+interface ColumnProperties {
+  title: string;
+  cards: Array<Card>;
+  id: string;
+  index: number;
+  isLastColumn: boolean;
+}
+
+export default function Column(props: ColumnProperties) {
+  const { title, cards, id, index, isLastColumn } = props;
   const [openEditColumn, setOpenEditColumn] = React.useState(false);
 
   return (
     <div className={clsx(styles.column, styles.columnsContainer)}>
       <div className={styles.columnHeader}>
         <IconButton onClick={() => setOpenEditColumn(true)}>
-          <Build style={{fontSize: "12", color: "white"}} />
+          <Build style={{ fontSize: 12, color: 'white' }} />
         </IconButton>
         <span>{title}</span>
-        <span> ({cards.length})</span>
+        <span>{`(${cards.length}}`}</span>
       </div>
       <Droppable droppableId={id} index={index}>
         {(provided, snapshot) => (
@@ -37,6 +49,7 @@ export default function Column(props) {
                 id={card.id}
                 key={card.id}
                 index={cardIndex}
+                hasArchive={isLastColumn}
               />
             ))}
             {provided.placeholder}

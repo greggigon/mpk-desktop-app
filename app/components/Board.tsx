@@ -17,7 +17,7 @@ import { RootState } from '../store';
 import AddNewCardDialog from './dialogs/AddNewCardDialog';
 
 const selectBoard = (state: RootState) => {
-  const selectedBoard = state.app.selectedBoard;
+  const { selectedBoard } = state.app;
   return state.boards.byId[selectedBoard];
 };
 
@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 });
 
 const addKeyboardShortcutHandling = (handler) => {
-  mousetrap.bind("Shif+A", () => {
+  mousetrap.bind('Shif+A', () => {
     handler();
     return false;
   });
@@ -66,7 +66,7 @@ export default function Board() {
   };
 
   const cardIdsToCardsList = (column, cards) => {
-    return column.cards.map( cardId => cards.find( it => it.id === cardId));
+    return column.cards.map((cardId) => cards.find((it) => it.id === cardId));
   };
 
   addKeyboardShortcutHandling(() => {
@@ -84,6 +84,7 @@ export default function Board() {
             cards={cardIdsToCardsList(column, board.cards)}
             index={index}
             id={column.id}
+            isLastColumn={index + 1 === board.columns.length}
           />
         ))}
       </DragDropContext>
@@ -107,7 +108,8 @@ export default function Board() {
         ))}
       </SpeedDial>
       <AddNewCardDialog
-        selectedColumn={selectedColumn}
+        columnId={selectedColumn.id}
+        columnTitle={selectedColumn.title}
         onAdd={handleAdd}
         onClose={handleCancel}
       />

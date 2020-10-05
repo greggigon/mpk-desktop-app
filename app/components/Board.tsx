@@ -107,12 +107,14 @@ export default function Board() {
           />
         ))}
       </SpeedDial>
-      <AddNewCardDialog
-        columnId={selectedColumn.id}
-        columnTitle={selectedColumn.title}
-        onAdd={handleAdd}
-        onClose={handleCancel}
-      />
+      {selectedColumn && (
+        <AddNewCardDialog
+          columnId={selectedColumn.id}
+          columnTitle={selectedColumn.title}
+          onAdd={handleAdd}
+          onClose={handleCancel}
+        />
+      )}
     </div>
   );
 }

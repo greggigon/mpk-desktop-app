@@ -35,8 +35,8 @@ if (shouldIncludeLogger) {
 }
 
 export const configuredStore = (
-  appDataFolder: string,
-  initialState?: RootState
+  initialState?: RootState,
+  appDataFolder: string
 ) => {
   // Create Store
   const persisterMiddleware = createPersister(appDataFolder);

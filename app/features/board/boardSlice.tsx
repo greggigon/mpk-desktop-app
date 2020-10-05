@@ -1,8 +1,7 @@
-import { StayCurrentLandscape } from '@material-ui/icons';
 import { createSlice } from '@reduxjs/toolkit';
 import { createCard, createNewBoard } from '../../model/cards';
 
-const moveCardFromColumnToColumn = (board, source, destination, draggableId) => {
+const moveCardFromColumnToColumn = (board, source, destination) => {
   if (destination == null) {
     return;
   }
@@ -10,16 +9,22 @@ const moveCardFromColumnToColumn = (board, source, destination, draggableId) => 
     if (source.index === destination.index) {
       return;
     }
-    const sourceColumn = board.columns.find(it => it.id === source.droppableId);
+    const sourceColumn = board.columns.find(
+      (it) => it.id === source.droppableId
+    );
     const card = sourceColumn.cards[source.index];
     sourceColumn.cards.splice(source.index, 1);
     sourceColumn.cards.splice(destination.index, 0, card);
   } else {
-    const sourceColumn = board.columns.find(it => it.id === source.droppableId);
+    const sourceColumn = board.columns.find(
+      (it) => it.id === source.droppableId
+    );
     const card = sourceColumn.cards[source.index];
     sourceColumn.cards.splice(source.index, 1);
 
-    const destinationColumn = board.columns.find(it => it.id === destination.droppableId);
+    const destinationColumn = board.columns.find(
+      (it) => it.id === destination.droppableId
+    );
     destinationColumn.cards.splice(destination.index, 0, card);
   }
 };
@@ -27,7 +32,7 @@ const moveCardFromColumnToColumn = (board, source, destination, draggableId) => 
 const addCardToBoard = (board, title, description, columnId, addAtTheTop) => {
   const card = createCard(title, description);
   board.cards.push(card);
-  const columnToAddCardTo = board.columns.find(it => it.id === columnId);
+  const columnToAddCardTo = board.columns.find((it) => it.id === columnId);
   if (addAtTheTop) {
     columnToAddCardTo.cards.splice(0, 0, card.id);
   } else {
@@ -43,18 +48,18 @@ const removeCardFromBoard = (board, cardId) => {
       column.cards.splice(indexOfCard, 1);
     }
   });
-  const index = board.cards.findIndex(card => card.id === cardId);
+  const index = board.cards.findIndex((card) => card.id === cardId);
   board.cards.splice(index, 1);
 };
 
 const updateCardDetails = (cards, cardId, title, description) => {
-  const card = cards.find(card => card.id === cardId);
+  const card = cards.find((c) => c.id === cardId);
   card.title = title;
   card.description = description;
 };
 
 const updateColumnDetails = (board, columnId, title) => {
-  const columnToUpdate = board.columns.find(column => column.id === columnId);
+  const columnToUpdate = board.columns.find((column) => column.id === columnId);
   columnToUpdate.title = title;
 };
 
@@ -63,9 +68,9 @@ const boardSlice = createSlice({
   initialState: {},
   reducers: {
     moveCard(state, action) {
-      const { source, destination, draggableId } = action.payload;
+      const { source, destination } = action.payload;
       const board = state.byId[action.selectedBoard];
-      moveCardFromColumnToColumn(board, source, destination, draggableId);
+      moveCardFromColumnToColumn(board, source, destination);
     },
     addCard(state, action) {
       const { title, description, columnId, addAtTheTop } = action.payload;
@@ -86,7 +91,7 @@ const boardSlice = createSlice({
     deleteBoard(state, action) {
       const boardToRemove = action.payload;
       const indexOfBoard = state.allIds.indexOf(boardToRemove);
-      delete(state.byId[boardToRemove]);
+      delete state.byId[boardToRemove];
       state.allIds.splice(indexOfBoard, 1);
     },
     updateCard(state, action) {
@@ -102,5 +107,14 @@ const boardSlice = createSlice({
   },
 });
 
-export const { moveCard, addCard, deleteCard, createBoard, updateCard, updateColumn, deleteBoard } = boardSlice.actions;
+export const {
+  moveCard,
+  addCard,
+  deleteCard,
+  createBoard,
+  updateCard,
+  updateColumn,
+  deleteBoard,
+} = boardSlice.actions;
+
 export default boardSlice.reducer;

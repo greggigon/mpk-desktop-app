@@ -1,0 +1,35 @@
+.column {
+  width: 33%;
+  height: 90vh;
+}
+
+.columnsContainer {
+  margin: 10px;
+}
+
+.columnHeader {
+  text-align: left;
+  margin-bottom: 10px;
+  vertical-align: middle;
+}
+
+.cardsContainer {
+  height: 100%;
+  padding: 5px;
+  border: 1px solid #616161;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.cardsContainerDraggedOver {
+  border: 1px dashed #616161;
+}
+
+::-webkit-scrollbar {
+  width: .3em
+}
+
+::-webkit-scrollbar-thumb:window-inactive,
+::-webkit-scrollbar-thumb {
+  background:  gray
+}

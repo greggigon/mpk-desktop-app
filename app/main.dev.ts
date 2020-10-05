@@ -15,6 +15,7 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+import loader from './features/persistance/boardsLoader';
 
 export default class AppUpdater {
   constructor() {
@@ -80,11 +81,15 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+    const configuration = { appDataFolder: app.getPath('appData') };
+    mainWindow.webContents.send('window-loaded-configuration', configuration);
+
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {
       mainWindow.show();
       mainWindow.focus();
+      mainWindow.maximize();
     }
   });
 

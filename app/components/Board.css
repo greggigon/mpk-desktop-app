@@ -1,0 +1,6 @@
+.container {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  max-height: 100vh;
+}

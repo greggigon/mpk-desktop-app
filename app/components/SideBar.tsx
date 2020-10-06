@@ -28,7 +28,7 @@ import { createBoard, deleteBoard } from '../features/board/boardSlice';
 import { switchToBoard } from '../features/app/appSlice';
 import { isBlank } from '../utils/stringUtils';
 import styles from './SideBar.css';
-import { RestaurantMenu } from '@material-ui/icons';
+import CardsArchiveDialog from './dialogs/CardsArchiveDialog';
 
 const selectBoards = (state: RootState) => {
   return state.boards;
@@ -74,6 +74,7 @@ export default function SideBar() {
   const [boardName, setBoardName] = React.useState();
   const [numberOfColumns, setNumberOfColumns] = React.useState(3);
   const [boardNameError, setBoardNameError] = React.useState(false);
+  const [archiveDialogOpen, setArchiveDialogOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -91,8 +92,8 @@ export default function SideBar() {
     dispatch(switchToBoard(boardId));
   };
 
-  const isSelectedBoard = (boardId, selectedBoardId) => {
-    return boardId === selectedBoardId;
+  const isSelectedBoard = (boardId, theOtherId) => {
+    return boardId === theOtherId;
   };
 
   const handleBoardNameChange = (event) => {
@@ -131,19 +132,35 @@ export default function SideBar() {
     }
   };
 
+  const handleCloseArchivesDialog = () => {
+    setArchiveDialogOpen(false);
+  };
+
+  const handleOpenArchivesDialog = () => {
+    setArchiveDialogOpen(true);
+    setOpenMenu(false);
+  };
+
   return (
     <div className={styles.container}>
       {boards.allIds.map((boardId, index) => (
         <Tooltip
+          arrow
           title={boards.byId[boardId].title}
           placement="right"
           key={boardId}
-          className={clsx(classes.boardButton, isSelectedBoard(boardId, selectedBoardId) && classes.selectedBoardButton)}
+          className={clsx(
+            classes.boardButton,
+            isSelectedBoard(boardId, selectedBoardId) &&
+              classes.selectedBoardButton
+          )}
         >
           <ButtonBase>
             <Avatar
               variant="rounded"
-              style={{backgroundColor: colorForBoardButton[100 + (100 * index)]}}
+              style={{
+                backgroundColor: colorForBoardButton[100 + 100 * index],
+              }}
               onClick={() => switchBoard(boardId)}
             >
               {String.fromCharCode(65 + index)}
@@ -170,7 +187,9 @@ export default function SideBar() {
           open={openMenu}
           onClose={handleCloseMenu}
         >
-          <MenuItem>View cards archive</MenuItem>
+          <MenuItem onClick={handleOpenArchivesDialog}>
+            View archived cards
+          </MenuItem>
           <MenuItem
             onClick={handleDeleteBoard}
             disabled={boards.allIds.length < 2}
@@ -180,10 +199,20 @@ export default function SideBar() {
         </Menu>
       </Box>
 
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
         <AppBar className={classes.appBar}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
@@ -194,7 +223,7 @@ export default function SideBar() {
             </Button>
           </Toolbar>
         </AppBar>
-        <div style={{padding: "20px"}}>
+        <div style={{ padding: '20px' }}>
           <div>
             <TextField
               required
@@ -210,11 +239,15 @@ export default function SideBar() {
           </div>
           <div>
             <FormControl variant="filled" className={classes.formControl}>
-              <InputLabel id="demo-simple-select-filled-label">Number of columns</InputLabel>
+              <InputLabel id="demo-simple-select-filled-label">
+                Number of columns
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-filled-label"
                 id="demo-simple-select-filled"
-                onChange={(event) => {setNumberOfColumns(event.target.value)}}
+                onChange={(event) => {
+                  setNumberOfColumns(event.target.value);
+                }}
                 value={numberOfColumns}
               >
                 <MenuItem value={3}>3</MenuItem>
@@ -228,6 +261,11 @@ export default function SideBar() {
           </div>
         </div>
       </Dialog>
+
+      <CardsArchiveDialog
+        open={archiveDialogOpen}
+        onClose={handleCloseArchivesDialog}
+      />
     </div>
   );
 }

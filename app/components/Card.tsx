@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { Menu, MenuItem } from '@material-ui/core';
 
 import styles from './Card.css';
-import { deleteCard } from '../features/board/boardSlice';
+import { deleteCard, archiveCard } from '../features/board/boardSlice';
 import EditCardDialog from './dialogs/EditCardDialog';
 
 interface KanbanCardProptries {
@@ -46,6 +46,10 @@ export default function KanbanCard(props: KanbanCardProptries) {
     setEditCardDialogOpen(false);
   };
 
+  const archiveTheCard = () => {
+    dispatch(archiveCard(id));
+  };
+
   return (
     <div>
       <Draggable draggableId={id} index={index}>
@@ -71,7 +75,9 @@ export default function KanbanCard(props: KanbanCardProptries) {
                 onClose={closeMenu}
               >
                 <MenuItem onClick={editCard}>Edit</MenuItem>
-                {hasArchive && <MenuItem>Archive</MenuItem>}
+                {hasArchive && (
+                  <MenuItem onClick={archiveTheCard}>Archive</MenuItem>
+                )}
                 <MenuItem onClick={removeCard}>Delete</MenuItem>
               </Menu>
             </div>

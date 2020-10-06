@@ -31,7 +31,7 @@ export default function Column(props: ColumnProperties) {
           <Build style={{ fontSize: 12, color: 'white' }} />
         </IconButton>
         <span>{title}</span>
-        <span>{`(${cards.length}}`}</span>
+        <span>{`(${cards.length})`}</span>
       </div>
       <Droppable droppableId={id} index={index}>
         {(provided, snapshot) => (

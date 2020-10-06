@@ -63,6 +63,16 @@ const updateColumnDetails = (board, columnId, title) => {
   columnToUpdate.title = title;
 };
 
+const archiveTheCard = (board, cardId) => {
+  board.columns.forEach((column) => {
+    const indexOfCard = column.cards.indexOf(cardId);
+    if (indexOfCard > -1) {
+      column.cards.splice(indexOfCard, 1);
+    }
+  });
+  board.archive.push({ cardId, archivedOn: Date.now() });
+};
+
 const boardSlice = createSlice({
   name: 'board',
   initialState: {},
@@ -104,6 +114,11 @@ const boardSlice = createSlice({
       const { columnId, title } = action.payload;
       updateColumnDetails(board, columnId, title);
     },
+    archiveCard(state, action) {
+      const board = state.byId[action.selectedBoard];
+      const cardId = action.payload;
+      archiveTheCard(board, cardId);
+    },
   },
 });
 
@@ -115,6 +130,7 @@ export const {
   updateCard,
   updateColumn,
   deleteBoard,
+  archiveCard,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

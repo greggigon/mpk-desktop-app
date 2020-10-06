@@ -8,8 +8,12 @@ const appSlice = createSlice({
       const selectedBoardId = action.payload;
       state.selectedBoard = selectedBoardId;
     },
+    switchTheme(state, action) {
+      const theme = action.payload;
+      state.theme = theme;
+    },
   },
 });
 
-export const { switchToBoard } = appSlice.actions;
+export const { switchToBoard, switchTheme } = appSlice.actions;
 export default appSlice.reducer;

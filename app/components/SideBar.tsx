@@ -29,6 +29,7 @@ import { switchToBoard } from '../features/app/appSlice';
 import { isBlank } from '../utils/stringUtils';
 import styles from './SideBar.css';
 import CardsArchiveDialog from './dialogs/CardsArchiveDialog';
+import ThemeSwitch from './ThemeSwitch';
 
 const selectBoards = (state: RootState) => {
   return state.boards;
@@ -177,9 +178,12 @@ export default function SideBar() {
       </Box>
 
       <Box className={styles.boardMenu}>
-        <IconButton onClick={handleOpenMenu}>
-          <MoreVertIcon />
-        </IconButton>
+        <ThemeSwitch />
+        <Tooltip title="Board actions" placement="right" arrow>
+          <IconButton onClick={handleOpenMenu}>
+            <MoreVertIcon />
+          </IconButton>
+        </Tooltip>
         <Menu
           id="long-menu"
           anchorEl={anchorEl}

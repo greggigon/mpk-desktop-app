@@ -28,10 +28,10 @@ export default function Column(props: ColumnProperties) {
     <div className={clsx(styles.column, styles.columnsContainer)}>
       <div className={styles.columnHeader}>
         <IconButton onClick={() => setOpenEditColumn(true)}>
-          <Build style={{ fontSize: 12, color: 'white' }} />
+          <Build style={{ fontSize: 12 }} />
         </IconButton>
         <span>{title}</span>
-        <span>{`(${cards.length})`}</span>
+        <span>{` (${cards.length})`}</span>
       </div>
       <Droppable droppableId={id} index={index}>
         {(provided, snapshot) => (

@@ -1,26 +1,10 @@
 .card {
   padding: 10px;
   text-align: left;
-  background-color: #880e4f;
-  color: white;
   margin-top: 5px;
   margin-bottom: 5px;
   font-size: 0.9em;
   display: flex;
-}
-
-.cardDragging {
-  padding: 10px;
-  text-align: left;
-  background-color: #d81b60;
-  color: white;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 0.9em;
-  display: flex;
-}
-
-.deleteButton {
 }
 
 .title {

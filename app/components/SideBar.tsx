@@ -21,7 +21,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Menu, MenuItem } from '@material-ui/core';
 
 import clsx from 'clsx';
-import colorForBoardButton from '@material-ui/core/colors/lime';
+import colorForDarkTheme from '@material-ui/core/colors/lime';
+import colorForLightTheme from '@material-ui/core/colors/green';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { createBoard, deleteBoard } from '../features/board/boardSlice';
@@ -30,6 +31,7 @@ import { isBlank } from '../utils/stringUtils';
 import styles from './SideBar.css';
 import CardsArchiveDialog from './dialogs/CardsArchiveDialog';
 import ThemeSwitch from './ThemeSwitch';
+import { RootState } from '../store';
 
 const selectBoards = (state: RootState) => {
   return state.boards;
@@ -37,6 +39,10 @@ const selectBoards = (state: RootState) => {
 
 const selectedBoard = (state: RootState) => {
   return state.app.selectedBoard;
+};
+
+const selectTheme = (state: RootState) => {
+  return state.app.theme;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -69,6 +75,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function SideBar() {
   const boards = useSelector(selectBoards);
   const selectedBoardId = useSelector(selectedBoard);
+  const theme = useSelector(selectTheme);
 
   const [open, setOpen] = React.useState(false);
   const [openMenu, setOpenMenu] = React.useState(false);
@@ -141,7 +148,8 @@ export default function SideBar() {
     setArchiveDialogOpen(true);
     setOpenMenu(false);
   };
-
+  const colorForBoardButton =
+    theme === 'dark' ? colorForDarkTheme : colorForLightTheme;
   return (
     <div className={styles.container}>
       {boards.allIds.map((boardId, index) => (

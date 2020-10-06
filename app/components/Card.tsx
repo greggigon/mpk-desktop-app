@@ -4,7 +4,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
-import { Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem, Paper } from '@material-ui/core';
 
 import styles from './Card.css';
 import { deleteCard, archiveCard } from '../features/board/boardSlice';
@@ -54,8 +54,8 @@ export default function KanbanCard(props: KanbanCardProptries) {
     <div>
       <Draggable draggableId={id} index={index}>
         {(provided, snapshot) => (
-          <div
-            className={snapshot.isDragging ? styles.cardDragging : styles.card}
+          <Paper
+            className={styles.card}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
@@ -81,7 +81,7 @@ export default function KanbanCard(props: KanbanCardProptries) {
                 <MenuItem onClick={removeCard}>Delete</MenuItem>
               </Menu>
             </div>
-          </div>
+          </Paper>
         )}
       </Draggable>
       <EditCardDialog

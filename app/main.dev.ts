@@ -128,3 +128,9 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
 });
+
+app.setAboutPanelOptions({
+  applicationName: 'My Personal Kanban',
+  copyright: 'Greg Gigon 2020',
+  version: app.getVersion(),
+});

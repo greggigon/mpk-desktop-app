@@ -101,7 +101,7 @@ export default function CardsArchiveDialog(
   const handleSubmit = (event) => {
     event.preventDefault();
     const regex = new RegExp(`${searchTerm}`, 'igm');
-    const filteredArchive = tableContent.filter((entry) =>
+    const filteredArchive = mapTableContent(archive, cards).filter((entry) =>
       regex.test(entry.title)
     );
     setTableContent(filteredArchive);

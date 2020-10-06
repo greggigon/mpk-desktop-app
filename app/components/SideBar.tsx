@@ -265,6 +265,8 @@ export default function SideBar() {
       <CardsArchiveDialog
         open={archiveDialogOpen}
         onClose={handleCloseArchivesDialog}
+        archive={boards.byId[selectedBoardId].archive}
+        cards={boards.byId[selectedBoardId].cards}
       />
     </div>
   );

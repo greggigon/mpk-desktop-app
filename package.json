@@ -1,7 +1,7 @@
 {
   "name": "my-personal-kanban",
   "productName": "My Personal Kanban",
-  "version": "1.3.0",
+  "version": "2.0.0-alpha0",
   "description": "My Personal Kanban - Based on Electron Bolierplate",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",

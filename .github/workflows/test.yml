@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-10.14, windows-2019, ubuntu-18.04]
+        os: [macOS-latest, windows-2019, ubuntu-18.04]
 
     steps:
       - name: Check out Git repository
@@ -33,5 +33,7 @@ jobs:
             yarn lint
             yarn tsc
             yarn test
-            yarn build-e2e
-            yarn test-e2e
+            # yarn build-e2e
+            # yarn test-e2e
+
+# I commented the above lines to shorten the build time in GitHub.

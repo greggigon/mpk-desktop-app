@@ -19,6 +19,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Menu, MenuItem } from '@material-ui/core';
+import mousetrap from 'mousetrap';
 
 import clsx from 'clsx';
 import colorForDarkTheme from '@material-ui/core/colors/lime';
@@ -73,6 +74,29 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const addKeyboardShortcutHnadlingForSwitchinBoards = (callback) => {
+  mousetrap.bind('mod+shift+up', () => {
+    callback('UP');
+    return false;
+  });
+  mousetrap.bind('mod+shift+down', () => {
+    callback('DOWN');
+    return false;
+  });
+};
+
+const getBoardUp = (boards, selectedBoardId) => {
+  const indexOfCurrentBoard = boards.allIds.indexOf(selectedBoardId);
+  if (indexOfCurrentBoard === 0) return null;
+  return boards.allIds[indexOfCurrentBoard - 1];
+};
+
+const getBoardDown = (boards, selectedBoardId) => {
+  const indexOfCurrentBoard = boards.allIds.indexOf(selectedBoardId);
+  if (indexOfCurrentBoard === boards.allIds.length - 1) return null;
+  return boards.allIds[indexOfCurrentBoard + 1];
+};
+
 export default function SideBar() {
   const boards = useSelector(selectBoards);
   const selectedBoardId = useSelector(selectedBoard);
@@ -97,7 +121,7 @@ export default function SideBar() {
     }
   };
 
-  const switchBoard = (boardId) => {
+  const handleSwitchBoard = (boardId) => {
     dispatch(switchToBoard(boardId));
   };
 
@@ -154,6 +178,16 @@ export default function SideBar() {
     return boards.allIds.length > MAX_NUMBER_OF_BOARDS - 1;
   };
 
+  addKeyboardShortcutHnadlingForSwitchinBoards((upOrDown) => {
+    let nextBoardId = null;
+    if (upOrDown === 'UP') {
+      nextBoardId = getBoardUp(boards, selectedBoardId);
+    } else {
+      nextBoardId = getBoardDown(boards, selectedBoardId);
+    }
+    if (nextBoardId) dispatch(switchToBoard(nextBoardId));
+  });
+
   const colorForBoardButton =
     theme === 'dark' ? colorForDarkTheme : colorForLightTheme;
   return (
@@ -176,7 +210,7 @@ export default function SideBar() {
               style={{
                 backgroundColor: colorForBoardButton[100 + 100 * index],
               }}
-              onClick={() => switchBoard(boardId)}
+              onClick={() => handleSwitchBoard(boardId)}
             >
               {String.fromCharCode(65 + index)}
             </Avatar>

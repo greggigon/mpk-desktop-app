@@ -15,8 +15,10 @@ import Column from './Column';
 import { moveCard } from '../features/board/boardSlice';
 import { RootState } from '../store';
 import AddNewCardDialog from './dialogs/AddNewCardDialog';
+import { Board as BoardType } from '../model/board';
+import { Card } from '../model/cards';
 
-const selectBoard = (state: RootState) => {
+const selectBoard = (state: RootState): BoardType => {
   const { selectedBoard } = state.app;
   return state.boards.byId[selectedBoard];
 };
@@ -66,7 +68,9 @@ export default function Board() {
   };
 
   const cardIdsToCardsList = (column, cards) => {
-    return column.cards.map((cardId) => cards.find((it) => it.id === cardId));
+    return column.cards.map((cardId: string) =>
+      cards.find((it: Card) => it.id === cardId)
+    );
   };
 
   addKeyboardShortcutHandling(() => {

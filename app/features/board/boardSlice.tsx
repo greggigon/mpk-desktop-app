@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createNewBoard } from '../../model/cards';
+import { createNewBoard } from '../../model/board';
 import {
   moveCardFromColumnToColumn,
   addCardToBoard,

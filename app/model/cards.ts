@@ -9,29 +9,23 @@ export interface Card {
   description: string;
   id: string;
   flag: Flag;
+  lastModified: number;
+  createdAt?: number;
 }
 
 const createFlag = (status = false) => {
   return { status };
 };
 
-const createCard = (title, description): Card => {
-  return { title, description, id: uuidv4(), flag: createFlag() };
-};
-
-const createNewBoard = (title, numberOfColumns) => {
-  const columns = [];
-  for (let i = 0; i < numberOfColumns; i + 1) {
-    columns.push({ title: `Column ${i}`, id: uuidv4(), cards: [] });
-  }
+const createCard = (title: string, description: string): Card => {
   return {
     title,
+    description,
     id: uuidv4(),
-    columns,
-    cards: [],
-    archive: [],
-    lastUpdated: Date.now(),
+    flag: createFlag(),
+    lastModified: Date.now(),
+    createdAt: Date.now(),
   };
 };
 
-export { createCard, createNewBoard, createFlag };
+export { createCard, createFlag };

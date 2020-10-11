@@ -1,0 +1,2 @@
+export const MAX_NUMBER_OF_BOARDS = 8;
+export const PLACEHOLDER_CONST = 'PLACEHOLDER';

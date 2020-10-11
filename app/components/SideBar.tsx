@@ -32,6 +32,7 @@ import styles from './SideBar.css';
 import CardsArchiveDialog from './dialogs/CardsArchiveDialog';
 import ThemeSwitch from './ThemeSwitch';
 import { RootState } from '../store';
+import { MAX_NUMBER_OF_BOARDS } from '../constants/appConfiguration';
 
 const selectBoards = (state: RootState) => {
   return state.boards;
@@ -148,6 +149,11 @@ export default function SideBar() {
     setArchiveDialogOpen(true);
     setOpenMenu(false);
   };
+
+  const disableAddBoardButton = () => {
+    return boards.allIds.length > MAX_NUMBER_OF_BOARDS - 1;
+  };
+
   const colorForBoardButton =
     theme === 'dark' ? colorForDarkTheme : colorForLightTheme;
   return (
@@ -179,7 +185,11 @@ export default function SideBar() {
       ))}
       <Box className={styles.addBoard}>
         <Tooltip title="Create new Board" placement="right">
-          <IconButton aria-label="add" onClick={() => setOpen(true)}>
+          <IconButton
+            aria-label="add"
+            onClick={() => setOpen(true)}
+            disabled={disableAddBoardButton()}
+          >
             <AddIcon />
           </IconButton>
         </Tooltip>

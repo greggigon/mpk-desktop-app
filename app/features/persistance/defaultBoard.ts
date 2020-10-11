@@ -1,14 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Board } from '../../model/board';
+import { createCard } from '../../model/cards';
 
 const cards = [
-  { title: 'Create first board', id: uuidv4() },
-  { title: 'Add some cards to the board', id: uuidv4() },
-  { title: 'Share My Personal Kanban with someone else', id: uuidv4() },
-  { title: 'Experiment with the first board', id: uuidv4() },
-  { title: 'Find a best Personal Kanban solution', id: uuidv4() },
-  { title: 'Download My Personal Kanban', id: uuidv4() },
-  { title: 'Install My Personal Kanban', id: uuidv4() },
-  { title: 'Decide if Kanban is good for task managment', id: uuidv4() },
+  createCard('Create first board', ''),
+  createCard('Add some cards to the board', ''),
+  createCard('Share My Personal Kanban with someone else', ''),
+  createCard('Experiment with the first board', ''),
+  createCard('Find a best Personal Kanban solution', ''),
+  createCard('Download My Personal Kanban', ''),
+  createCard('Install My Personal Kanban', ''),
+  createCard('Decide if Kanban is good for task managment', ''),
 ];
 
 const cardsInFirstColumn = [cards[0].id, cards[1].id, cards[2].id];
@@ -21,7 +23,7 @@ const columns = [
   { title: 'Done', id: uuidv4(), cards: cardsInThirdColumn },
 ];
 
-const board = {
+const board: Board = {
   title: 'Default board',
   id: uuidv4(),
   columns,

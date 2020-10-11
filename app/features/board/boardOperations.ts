@@ -1,4 +1,4 @@
-import { createCard, createFlag } from '../../model/cards';
+import { Card, createCard, createFlag } from '../../model/cards';
 
 export const moveCardFromColumnToColumn = (board, source, destination) => {
   if (destination == null) {
@@ -35,7 +35,7 @@ export const addCardToBoard = (
   columnId,
   addAtTheTop
 ) => {
-  const card = createCard(title, description);
+  const card: Card = createCard(title, description);
   board.cards.push(card);
   const columnToAddCardTo = board.columns.find((it) => it.id === columnId);
   if (addAtTheTop) {
@@ -79,6 +79,8 @@ export const archiveTheCard = (board, cardId) => {
 };
 
 export const setCardFlag = (cards, cardId, flag: boolean) => {
+  console.log(typeof Date.now());
+
   const card = cards.find((c) => c.id === cardId);
   if (!card.flag) {
     card.flag = createFlag(flag);

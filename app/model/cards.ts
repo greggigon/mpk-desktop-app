@@ -1,10 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
 
+export interface Flag {
+  status: boolean;
+}
+
+export interface Card {
+  title: string;
+  description: string;
+  id: string;
+  flag: Flag;
+}
+
 const createFlag = (status = false) => {
   return { status };
 };
 
-const createCard = (title, description) => {
+const createCard = (title, description): Card => {
   return { title, description, id: uuidv4(), flag: createFlag() };
 };
 

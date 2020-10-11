@@ -50,6 +50,7 @@ export default function Column(props: ColumnProperties) {
                 key={card.id}
                 index={cardIndex}
                 hasArchive={isLastColumn}
+                isFlagged={card.flag && card.flag.status}
               />
             ))}
             {provided.placeholder}

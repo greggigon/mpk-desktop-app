@@ -4,28 +4,24 @@ export const moveCardFromColumnToColumn = (board, source, destination) => {
   if (destination == null) {
     return;
   }
+  const sourceColumn = board.columns.find((it) => it.id === source.droppableId);
+  const cardId = sourceColumn.cards[source.index];
+
   if (source.droppableId === destination.droppableId) {
     if (source.index === destination.index) {
       return;
     }
-    const sourceColumn = board.columns.find(
-      (it) => it.id === source.droppableId
-    );
-    const card = sourceColumn.cards[source.index];
     sourceColumn.cards.splice(source.index, 1);
-    sourceColumn.cards.splice(destination.index, 0, card);
+    sourceColumn.cards.splice(destination.index, 0, cardId);
   } else {
-    const sourceColumn = board.columns.find(
-      (it) => it.id === source.droppableId
-    );
-    const card = sourceColumn.cards[source.index];
     sourceColumn.cards.splice(source.index, 1);
-
     const destinationColumn = board.columns.find(
       (it) => it.id === destination.droppableId
     );
-    destinationColumn.cards.splice(destination.index, 0, card);
+    destinationColumn.cards.splice(destination.index, 0, cardId);
   }
+  const card: Card = board.cards.find((it) => it.id === cardId);
+  card.lastModified = Date.now();
 };
 
 export const addCardToBoard = (
@@ -58,9 +54,10 @@ export const removeCardFromBoard = (board, cardId) => {
 };
 
 export const updateCardDetails = (cards, cardId, title, description) => {
-  const card = cards.find((c) => c.id === cardId);
+  const card: Card = cards.find((it) => it.id === cardId);
   card.title = title;
   card.description = description;
+  card.lastModified = Date.now();
 };
 
 export const updateColumnDetails = (board, columnId, title) => {
@@ -79,11 +76,10 @@ export const archiveTheCard = (board, cardId) => {
 };
 
 export const setCardFlag = (cards, cardId, flag: boolean) => {
-  console.log(typeof Date.now());
-
-  const card = cards.find((c) => c.id === cardId);
+  const card: Card = cards.find((it) => it.id === cardId);
   if (!card.flag) {
     card.flag = createFlag(flag);
   }
   card.flag.status = flag;
+  card.lastModified = Date.now();
 };

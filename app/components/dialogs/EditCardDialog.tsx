@@ -6,10 +6,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import { Typography } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { updateCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 import { RootState } from '../../store';
+import { Card } from '../../model/cards';
 
 interface EditCardDialogProperties {
   cardId: string;
@@ -17,7 +20,7 @@ interface EditCardDialogProperties {
   onClose: () => void;
 }
 
-const selectCards = (state: RootState) => {
+const selectCards = (state: RootState): Array<Card> => {
   const selectedBoardId = state.app.selectedBoard;
   return state.boards.byId[selectedBoardId].cards;
 };
@@ -55,6 +58,10 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
     }
   };
 
+  const lastModified = theCard?.lastModified
+    ? new Date(theCard.lastModified).toLocaleString()
+    : 'Not tracked yet';
+
   return (
     <Dialog
       open={open}
@@ -90,6 +97,12 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
               onChange={descriptionChanged}
               value={description}
             />
+          </div>
+          <div>
+            <Typography variant="caption">
+              Last changed on:&nbsp;
+              {lastModified}
+            </Typography>
           </div>
         </DialogContent>
         <DialogActions>

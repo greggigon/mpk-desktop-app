@@ -1,4 +1,5 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import { Build } from '@material-ui/icons';
 import { Droppable } from 'react-beautiful-dnd';
@@ -17,10 +18,31 @@ interface ColumnProps {
   cards: Array<CardType>;
 }
 
+const stylesForColumn = (theme) => {
+  return {
+    columnLimitReached: {
+      borderColor: theme.palette.warning.main,
+    },
+  };
+};
+const useStyles = makeStyles((theme) => stylesForColumn(theme));
+
 export default function Column(props: ColumnProps) {
   const { column, index, isLastColumn, cards } = props;
   const { title, id } = column;
   const [openEditColumn, setOpenEditColumn] = React.useState(false);
+  const [isDropDisabled, setIsDropDisabled] = React.useState(false);
+  const classesForColumn = useStyles();
+
+  React.useEffect(() => {
+    if (column.options?.limiting) {
+      setIsDropDisabled(cards.length >= (column.options.limitNumber as number));
+    }
+  }, [cards, column]);
+
+  const cardsCounter = column.options?.limiting
+    ? `${cards.length} of ${column.options.limitNumber}`
+    : `${cards.length}`;
 
   return (
     <div className={clsx(styles.column, styles.columnsContainer)}>
@@ -29,13 +51,14 @@ export default function Column(props: ColumnProps) {
           <Build style={{ fontSize: 12 }} />
         </IconButton>
         <span>{title}</span>
-        <span>{` (${cards.length})`}</span>
+        <span>{` (${cardsCounter})`}</span>
       </div>
-      <Droppable droppableId={id} index={index}>
+      <Droppable droppableId={id} index={index} isDropDisabled={isDropDisabled}>
         {(provided, snapshot) => (
           <div
             className={clsx(
               styles.cardsContainer,
+              isDropDisabled && classesForColumn.columnLimitReached,
               snapshot.isDraggingOver && styles.cardsContainerDraggedOver
             )}
             ref={provided.innerRef}
@@ -64,18 +87,3 @@ export default function Column(props: ColumnProps) {
     </div>
   );
 }
-
-// Column.propTypes = {
-//   title: PropTypes.string.isRequired,
-//   cards: PropTypes.arrayOf(PropTypes.object).isRequired,
-//   id: PropTypes.string.isRequired,
-//   index: PropTypes.number.isRequired,
-//   isLastColumn: PropTypes.bool.isRequired,
-//   limiting: PropTypes.bool,
-//   limitNumber: PropTypes.number,
-// };
-
-// Column.defaultProps = {
-//   limiting: false,
-//   limitNumber: 0,
-// };

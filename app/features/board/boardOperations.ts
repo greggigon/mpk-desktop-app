@@ -1,3 +1,4 @@
+import { Board, ColumnOptions } from '../../model/board';
 import { Card, createCard, createFlag } from '../../model/cards';
 
 export const moveCardFromColumnToColumn = (board, source, destination) => {
@@ -60,9 +61,21 @@ export const updateCardDetails = (cards, cardId, title, description) => {
   card.lastModified = Date.now();
 };
 
-export const updateColumnDetails = (board, columnId, title) => {
+export const updateColumnDetails = (
+  board: Board,
+  columnId: string,
+  title: string,
+  isLimiting: boolean,
+  numberOfCardsLimit: number
+) => {
   const columnToUpdate = board.columns.find((column) => column.id === columnId);
-  columnToUpdate.title = title;
+  if (columnToUpdate) {
+    columnToUpdate.title = title;
+    columnToUpdate.options = {
+      limitNumber: numberOfCardsLimit,
+      limiting: isLimiting,
+    } as ColumnOptions;
+  }
 };
 
 export const archiveTheCard = (board, cardId) => {

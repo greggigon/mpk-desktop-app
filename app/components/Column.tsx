@@ -7,21 +7,19 @@ import clsx from 'clsx';
 import styles from './Column.css';
 import Card from './Card';
 import EditColumnDialog from './dialogs/EditColumnDialog';
+import { Column as ColumnType } from '../model/board';
+import { Card as CardType } from '../model/cards';
 
-interface Card {
-  id: string;
-}
-
-interface ColumnProperties {
-  title: string;
-  cards: Array<Card>;
-  id: string;
+interface ColumnProps {
+  column: ColumnType;
   index: number;
   isLastColumn: boolean;
+  cards: Array<CardType>;
 }
 
-export default function Column(props: ColumnProperties) {
-  const { title, cards, id, index, isLastColumn } = props;
+export default function Column(props: ColumnProps) {
+  const { column, index, isLastColumn, cards } = props;
+  const { title, id } = column;
   const [openEditColumn, setOpenEditColumn] = React.useState(false);
 
   return (
@@ -57,12 +55,27 @@ export default function Column(props: ColumnProperties) {
           </div>
         )}
       </Droppable>
-      <EditColumnDialog
-        columnId={id}
-        title={title}
-        onClose={() => setOpenEditColumn(false)}
-        open={openEditColumn}
-      />
+      {openEditColumn && (
+        <EditColumnDialog
+          onClose={() => setOpenEditColumn(false)}
+          column={column}
+        />
+      )}
     </div>
   );
 }
+
+// Column.propTypes = {
+//   title: PropTypes.string.isRequired,
+//   cards: PropTypes.arrayOf(PropTypes.object).isRequired,
+//   id: PropTypes.string.isRequired,
+//   index: PropTypes.number.isRequired,
+//   isLastColumn: PropTypes.bool.isRequired,
+//   limiting: PropTypes.bool,
+//   limitNumber: PropTypes.number,
+// };
+
+// Column.defaultProps = {
+//   limiting: false,
+//   limitNumber: 0,
+// };

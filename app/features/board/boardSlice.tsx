@@ -48,8 +48,19 @@ const boardSlice = createSlice({
     },
     updateColumn(state, action) {
       const board = state.byId[action.selectedBoard];
-      const { columnId, title } = action.payload;
-      updateColumnDetails(board, columnId, title);
+      const {
+        columnId,
+        title,
+        isLimiting,
+        numberOfCardsLimit,
+      } = action.payload;
+      updateColumnDetails(
+        board,
+        columnId,
+        title,
+        isLimiting,
+        numberOfCardsLimit
+      );
     },
     archiveCard(state, action) {
       const board = state.byId[action.selectedBoard];

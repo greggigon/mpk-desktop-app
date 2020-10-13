@@ -15,7 +15,7 @@ import Column from './Column';
 import { moveCard } from '../features/board/boardSlice';
 import { RootState } from '../store';
 import AddNewCardDialog from './dialogs/AddNewCardDialog';
-import { Board as BoardType } from '../model/board';
+import { Board as BoardType, Column as ColumnType } from '../model/board';
 import { Card } from '../model/cards';
 
 const selectBoard = (state: RootState): BoardType => {
@@ -67,10 +67,13 @@ export default function Board() {
     dispatch(moveCard(result));
   };
 
-  const cardIdsToCardsList = (column, cards) => {
-    return column.cards.map((cardId: string) =>
-      cards.find((it: Card) => it.id === cardId)
-    );
+  const cardIdsToCardsList = (
+    column: ColumnType,
+    cards: Array<Card>
+  ): Array<Card> => {
+    return column.cards
+      .map((cardId: string) => cards.find((it: Card) => it.id === cardId))
+      .filter((card) => card !== undefined);
   };
 
   addKeyboardShortcutHandling(() => {
@@ -83,11 +86,10 @@ export default function Board() {
       <DragDropContext onDragEnd={onDragEnd}>
         {board.columns.map((column, index) => (
           <Column
-            title={column.title}
-            key={`column-${column.id}`}
+            column={column}
             cards={cardIdsToCardsList(column, board.cards)}
+            key={`column-${column.id}`}
             index={index}
-            id={column.id}
             isLastColumn={index + 1 === board.columns.length}
           />
         ))}

@@ -18,3 +18,13 @@
   align-items: center;
   margin-right: 10px;
 }
+
+.tagsContainer {
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+.tagOnCard {
+  margin: 1px;
+}

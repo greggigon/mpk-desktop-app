@@ -1,10 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Draggable } from 'react-beautiful-dnd';
 import IconButton from '@material-ui/core/IconButton';
 import { MoreVert, Flag } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
-import { Menu, MenuItem, Paper } from '@material-ui/core';
+import { Menu, MenuItem, Paper, Chip } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import PropTypes, { InferProps } from 'prop-types';
 
@@ -17,12 +17,19 @@ import {
 } from '../features/board/boardSlice';
 import EditCardDialog from './dialogs/EditCardDialog';
 
+const selectIfTagsShouldShow = (state: RootState): boolean => {
+  const { showTagsOnCards } = state.app;
+  if (showTagsOnCards === undefined) return false;
+  return showTagsOnCards;
+};
+
 export default function KanbanCard(
   props: InferProps<typeof KanbanCard.propTypes>
 ) {
   const { id, title, index, hasArchive, isFlagged } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [editCardDialogOpen, setEditCardDialogOpen] = React.useState(false);
+  const showTagsOnCards = useSelector(selectIfTagsShouldShow);
   const open = Boolean(anchorEl);
 
   const dispatch = useDispatch();
@@ -69,43 +76,54 @@ export default function KanbanCard(
       <Draggable draggableId={id} index={index}>
         {(provided, snapshot) => (
           <Paper
-            className={styles.card}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            {isFlagged && (
-              <div className={styles.flagContainer}>
-                <Flag />
+            <div className={styles.card}>
+              {isFlagged && (
+                <div className={styles.flagContainer}>
+                  <Flag />
+                </div>
+              )}
+              <div className={styles.title}>
+                <Typography variant="subtitle1">{title}</Typography>
+              </div>
+              <div className={styles.deleteButton}>
+                <IconButton onClick={openMenu}>
+                  <MoreVert />
+                </IconButton>
+                <Menu
+                  id="long-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={open}
+                  onClose={closeMenu}
+                >
+                  <MenuItem onClick={editCard}>Edit</MenuItem>
+                  {isFlagged ? (
+                    <MenuItem onClick={handleUnflagIt}>Unflag it</MenuItem>
+                  ) : (
+                    <MenuItem onClick={handleFlagIt}>Flag it!</MenuItem>
+                  )}
+                  <Divider />
+                  {hasArchive && (
+                    <MenuItem onClick={archiveTheCard}>Archive</MenuItem>
+                  )}
+                  <MenuItem onClick={removeCard}>Delete</MenuItem>
+                </Menu>
+              </div>
+            </div>
+            {showTagsOnCards && (
+              <div className={styles.tagsContainer}>
+                <Chip
+                  size="small"
+                  label="Kanban"
+                  className={styles.tagOnCard}
+                  style={{ backgroundColor: 'green' }}
+                />
               </div>
             )}
-            <div className={styles.title}>
-              <Typography variant="subtitle1">{title}</Typography>
-            </div>
-            <div className={styles.deleteButton}>
-              <IconButton onClick={openMenu}>
-                <MoreVert />
-              </IconButton>
-              <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={open}
-                onClose={closeMenu}
-              >
-                <MenuItem onClick={editCard}>Edit</MenuItem>
-                {isFlagged ? (
-                  <MenuItem onClick={handleUnflagIt}>Unflag it</MenuItem>
-                ) : (
-                  <MenuItem onClick={handleFlagIt}>Flag it!</MenuItem>
-                )}
-                <Divider />
-                {hasArchive && (
-                  <MenuItem onClick={archiveTheCard}>Archive</MenuItem>
-                )}
-                <MenuItem onClick={removeCard}>Delete</MenuItem>
-              </Menu>
-            </div>
           </Paper>
         )}
       </Draggable>

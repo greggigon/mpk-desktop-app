@@ -5,19 +5,20 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Tooltip from '@material-ui/core/Tooltip';
 import Box from '@material-ui/core/Box';
 import AddIcon from '@material-ui/icons/Add';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import CloseIcon from '@material-ui/icons/Close';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { makeStyles } from '@material-ui/core/styles';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Menu, MenuItem } from '@material-ui/core';
 import mousetrap from 'mousetrap';
 
@@ -32,6 +33,7 @@ import { isBlank } from '../utils/stringUtils';
 import styles from './SideBar.css';
 import CardsArchiveDialog from './dialogs/CardsArchiveDialog';
 import ThemeSwitch from './ThemeSwitch';
+import TagsSwitch from './TagsSwitch';
 import { RootState } from '../store';
 import { MAX_NUMBER_OF_BOARDS } from '../constants/appConfiguration';
 
@@ -230,6 +232,7 @@ export default function SideBar() {
       </Box>
 
       <Box className={styles.boardMenu}>
+        <TagsSwitch />
         <ThemeSwitch />
         <Tooltip title="Board actions" placement="right" arrow>
           <IconButton onClick={handleOpenMenu}>

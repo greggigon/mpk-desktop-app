@@ -32,6 +32,7 @@ const loadedData = (appDataPath: string) => {
   checkSaveFileExistsAndCreateIfNot(appFile, {
     selectedBoard: defaultBoard.id,
     theme: 'dark',
+    showTagsOnCards: false,
   });
 
   const boards = JSON.parse(fs.readFileSync(boardsFile, 'UTF-8'));

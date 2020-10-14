@@ -12,8 +12,16 @@ const appSlice = createSlice({
       const theme = action.payload;
       state.theme = theme;
     },
+    updateShowTagsOnCards(state, action) {
+      const showTagsOnCards = action.payload;
+      state.showTagsOnCards = showTagsOnCards;
+    },
   },
 });
 
-export const { switchToBoard, switchTheme } = appSlice.actions;
+export const {
+  switchToBoard,
+  switchTheme,
+  updateShowTagsOnCards,
+} = appSlice.actions;
 export default appSlice.reducer;

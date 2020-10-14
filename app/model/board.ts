@@ -1,6 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Card } from './cards';
 
+export interface Tag {
+  name: string;
+  color: string;
+  id: string;
+}
+
 export interface ColumnOptions {
   limiting: boolean;
   limitNumber?: number;
@@ -20,7 +26,12 @@ export interface Board {
   cards: Array<Card>;
   archive: Array<string>;
   lastUpdated: number;
+  tags: Array<Tag>;
 }
+
+export const createTag = (name: string, color: string) => {
+  return { name, color, id: uuidv4() };
+};
 
 export const createNewBoard = (
   title: string,
@@ -39,5 +50,6 @@ export const createNewBoard = (
     cards: [],
     archive: [],
     lastUpdated: Date.now(),
+    tags: [],
   };
 };

@@ -6,20 +6,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Box from '@material-ui/core/Box';
 import AddIcon from '@material-ui/icons/Add';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CloseIcon from '@material-ui/icons/Close';
-
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import TextField from '@material-ui/core/TextField';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Slide from '@material-ui/core/Slide';
 import { makeStyles } from '@material-ui/core/styles';
-import Select from '@material-ui/core/Select';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import { Menu, MenuItem } from '@material-ui/core';
+
+import { Menu, MenuItem, Divider } from '@material-ui/core';
 import mousetrap from 'mousetrap';
 
 import clsx from 'clsx';
@@ -27,15 +16,17 @@ import colorForDarkTheme from '@material-ui/core/colors/lime';
 import colorForLightTheme from '@material-ui/core/colors/green';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { createBoard, deleteBoard } from '../features/board/boardSlice';
+import { deleteBoard } from '../features/board/boardSlice';
 import { switchToBoard } from '../features/app/appSlice';
-import { isBlank } from '../utils/stringUtils';
 import styles from './SideBar.css';
 import CardsArchiveDialog from './dialogs/CardsArchiveDialog';
 import ThemeSwitch from './ThemeSwitch';
 import TagsSwitch from './TagsSwitch';
 import { RootState } from '../store';
 import { MAX_NUMBER_OF_BOARDS } from '../constants/appConfiguration';
+import ManageTagsDialog from './dialogs/ManageTagsDialog';
+import NewBoardDialog from './dialogs/NewBoardDialog';
+import board from '../features/persistance/defaultBoard';
 
 const selectBoards = (state: RootState) => {
   return state.boards;
@@ -50,17 +41,6 @@ const selectTheme = (state: RootState) => {
 };
 
 const useStyles = makeStyles((theme) => ({
-  appBar: {
-    position: 'relative',
-  },
-  title: {
-    marginLeft: theme.spacing(2),
-    flex: 1,
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 220,
-  },
   boardButton: {
     marginTop: 10,
     marginBottom: 10,
@@ -71,10 +51,6 @@ const useStyles = makeStyles((theme) => ({
     padding: 2,
   },
 }));
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const addKeyboardShortcutHnadlingForSwitchinBoards = (callback) => {
   mousetrap.bind('mod+shift+up', () => {
@@ -106,22 +82,12 @@ export default function SideBar() {
 
   const [open, setOpen] = React.useState(false);
   const [openMenu, setOpenMenu] = React.useState(false);
-  const [boardName, setBoardName] = React.useState();
-  const [numberOfColumns, setNumberOfColumns] = React.useState(3);
-  const [boardNameError, setBoardNameError] = React.useState(false);
   const [archiveDialogOpen, setArchiveDialogOpen] = React.useState(false);
+  const [openTagsDialog, setOpenTagsDialog] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
   const dispatch = useDispatch();
   const classes = useStyles();
-
-  const addBoard = () => {
-    if (!isBlank(boardName)) {
-      dispatch(createBoard({ title: boardName, numberOfColumns }));
-      setOpen(false);
-    } else {
-      setBoardNameError(true);
-    }
-  };
 
   const handleSwitchBoard = (boardId) => {
     dispatch(switchToBoard(boardId));
@@ -131,17 +97,7 @@ export default function SideBar() {
     return boardId === theOtherId;
   };
 
-  const handleBoardNameChange = (event) => {
-    if (isBlank(event.target.value)) {
-      setBoardNameError(true);
-    } else {
-      setBoardNameError(false);
-    }
-    setBoardName(event.target.value);
-  };
-
   const handleClose = () => {
-    setBoardNameError(false);
     setOpen(false);
   };
 
@@ -174,6 +130,14 @@ export default function SideBar() {
   const handleOpenArchivesDialog = () => {
     setArchiveDialogOpen(true);
     setOpenMenu(false);
+  };
+
+  const handleOpenManageTagsDialog = () => {
+    setOpenTagsDialog(true);
+  };
+
+  const handleCloseTagsDialog = () => {
+    setOpenTagsDialog(false);
   };
 
   const disableAddBoardButton = () => {
@@ -246,9 +210,11 @@ export default function SideBar() {
           open={openMenu}
           onClose={handleCloseMenu}
         >
+          <MenuItem onClick={handleOpenManageTagsDialog}>Manage tags</MenuItem>
           <MenuItem onClick={handleOpenArchivesDialog}>
             View archived cards
           </MenuItem>
+          <Divider />
           <MenuItem
             onClick={handleDeleteBoard}
             disabled={boards.allIds.length < 2}
@@ -257,70 +223,10 @@ export default function SideBar() {
           </MenuItem>
         </Menu>
       </Box>
-
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              New Board
-            </Typography>
-            <Button autoFocus color="inherit" onClick={addBoard}>
-              Create
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <div style={{ padding: '20px' }}>
-          <div>
-            <TextField
-              required
-              id="outlined-required"
-              label="Board name"
-              variant="outlined"
-              placeholder="Board name"
-              fullWidth
-              helperText="Board name can't be empty"
-              onChange={handleBoardNameChange}
-              error={boardNameError}
-            />
-          </div>
-          <div>
-            <FormControl variant="filled" className={classes.formControl}>
-              <InputLabel id="demo-simple-select-filled-label">
-                Number of columns
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-filled-label"
-                id="demo-simple-select-filled"
-                onChange={(event) => {
-                  setNumberOfColumns(event.target.value);
-                }}
-                value={numberOfColumns}
-              >
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={6}>6</MenuItem>
-                <MenuItem value={7}>7</MenuItem>
-                <MenuItem value={8}>8</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-        </div>
-      </Dialog>
-
+      {open && <NewBoardDialog close={handleClose} />}
+      {openTagsDialog && (
+        <ManageTagsDialog close={handleCloseTagsDialog} board={board} />
+      )}
       <CardsArchiveDialog
         open={archiveDialogOpen}
         onClose={handleCloseArchivesDialog}

@@ -39,7 +39,7 @@ export const createNewBoard = (
 ): Board => {
   const columns: Array<Column> = [];
   const options: ColumnOptions = { limiting: false, limitNumber: 0 };
-  for (let i = 0; i < numberOfColumns; i + 1) {
+  for (let i = 0; i < numberOfColumns; i += 1) {
     columns.push({ title: `Column ${i}`, id: uuidv4(), cards: [], options });
   }
 

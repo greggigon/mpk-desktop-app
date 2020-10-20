@@ -30,6 +30,15 @@ const board: Board = {
   cards,
   archive: [],
   lastUpdated: Date.now(),
+  tags: { byId: {}, allIds: new Array<string>() },
 };
 
-export default board;
+const boards = {
+  byId: {},
+  allIds: new Array<string>(),
+};
+
+boards.byId[board.id] = board;
+boards.allIds.push(board.id);
+
+export default boards;

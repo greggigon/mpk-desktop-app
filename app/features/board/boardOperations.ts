@@ -1,4 +1,4 @@
-import { Board, ColumnOptions } from '../../model/board';
+import { Board, ColumnOptions, createTag } from '../../model/board';
 import { Card, createCard, createFlag } from '../../model/cards';
 
 export const moveCardFromColumnToColumn = (board, source, destination) => {
@@ -95,4 +95,33 @@ export const setCardFlag = (cards, cardId, flag: boolean) => {
   }
   card.flag.status = flag;
   card.lastModified = Date.now();
+};
+
+export const addNewTag = (board: Board, name: string, color: string) => {
+  const newTag = createTag(name, color);
+  board.tags.byId[newTag.id] = newTag;
+  board.tags.allIds.push(newTag.id);
+};
+
+export const deleteTheTag = (board: Board, tagId: string) => {
+  delete board.tags.byId[tagId];
+  const indexOfTag = board.tags.allIds.indexOf(tagId);
+  board.tags.allIds.splice(indexOfTag, 1);
+  board.cards.forEach((card: Card) => {
+    if (card.tags) {
+      const tagInCard = card.tags.indexOf(tagId);
+      card.tags.splice(tagInCard, 1);
+    }
+  });
+};
+
+export const updateTheTag = (
+  board: Board,
+  id: string,
+  name: string,
+  color: string
+) => {
+  const theTag = board.tags.byId[id];
+  theTag.name = name;
+  theTag.color = color;
 };

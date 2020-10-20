@@ -19,6 +19,11 @@ export interface Column {
   options?: ColumnOptions;
 }
 
+export interface Tags {
+  byId: Record<string, Tag>;
+  allIds: Array<string>;
+}
+
 export interface Board {
   title: string;
   id: string;
@@ -26,7 +31,7 @@ export interface Board {
   cards: Array<Card>;
   archive: Array<string>;
   lastUpdated: number;
-  tags: Array<Tag>;
+  tags: Tags;
 }
 
 export const createTag = (name: string, color: string) => {
@@ -50,6 +55,6 @@ export const createNewBoard = (
     cards: [],
     archive: [],
     lastUpdated: Date.now(),
-    tags: [],
+    tags: { byId: {}, allIds: new Array<string>() },
   };
 };

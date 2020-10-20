@@ -45,6 +45,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
   const { close } = props;
 
   const [boardName, setBoardName] = React.useState('');
+  const [dialogOpen, setDialogOpen] = React.useState(true);
   const [numberOfColumns, setNumberOfColumns] = React.useState(3);
   const [boardNameError, setBoardNameError] = React.useState(false);
 
@@ -52,6 +53,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
   const classes = useStyles();
 
   const handleClose = () => {
+    setDialogOpen(false);
     close();
   };
 
@@ -76,7 +78,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
   return (
     <Dialog
       fullScreen
-      open
+      open={dialogOpen}
       onClose={handleClose}
       TransitionComponent={Transition}
     >

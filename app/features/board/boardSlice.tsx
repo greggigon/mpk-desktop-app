@@ -8,6 +8,9 @@ import {
   updateColumnDetails,
   archiveTheCard,
   setCardFlag,
+  addNewTag,
+  deleteTheTag,
+  updateTheTag,
 } from './boardOperations';
 
 const boardSlice = createSlice({
@@ -75,6 +78,20 @@ const boardSlice = createSlice({
       const board = state.byId[action.selectedBoard];
       setCardFlag(board.cards, action.payload, false);
     },
+    addTag(state, action) {
+      const board = state.byId[action.selectedBoard];
+      const { name, color } = action.payload;
+      addNewTag(board, name, color);
+    },
+    deleteTag(state, action) {
+      const board = state.byId[action.selectedBoard];
+      deleteTheTag(board, action.payload);
+    },
+    updateTag(state, action) {
+      const board = state.byId[action.selectedBoard];
+      const { name, color, id } = action.payload;
+      updateTheTag(board, id, name, color);
+    },
   },
 });
 
@@ -89,6 +106,9 @@ export const {
   archiveCard,
   flagCard,
   unflagCard,
+  addTag,
+  deleteTag,
+  updateTag,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

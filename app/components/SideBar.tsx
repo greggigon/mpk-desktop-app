@@ -26,7 +26,6 @@ import { RootState } from '../store';
 import { MAX_NUMBER_OF_BOARDS } from '../constants/appConfiguration';
 import ManageTagsDialog from './dialogs/ManageTagsDialog';
 import NewBoardDialog from './dialogs/NewBoardDialog';
-import board from '../features/persistance/defaultBoard';
 
 const selectBoards = (state: RootState) => {
   return state.boards;
@@ -78,6 +77,7 @@ const getBoardDown = (boards, selectedBoardId) => {
 export default function SideBar() {
   const boards = useSelector(selectBoards);
   const selectedBoardId = useSelector(selectedBoard);
+  const board = boards.byId[selectedBoardId];
   const theme = useSelector(selectTheme);
 
   const [open, setOpen] = React.useState(false);
@@ -134,6 +134,7 @@ export default function SideBar() {
 
   const handleOpenManageTagsDialog = () => {
     setOpenTagsDialog(true);
+    setOpenMenu(false);
   };
 
   const handleCloseTagsDialog = () => {
@@ -230,8 +231,8 @@ export default function SideBar() {
       <CardsArchiveDialog
         open={archiveDialogOpen}
         onClose={handleCloseArchivesDialog}
-        archive={boards.byId[selectedBoardId].archive}
-        cards={boards.byId[selectedBoardId].cards}
+        archive={board.archive}
+        cards={board.cards}
       />
     </div>
   );

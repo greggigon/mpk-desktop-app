@@ -27,8 +27,8 @@
 
 .tagsContainer {
   text-align: left;
-  padding-top: 5px;
-  padding-bottom: 10px;
+  padding: 0;
+  padding-bottom: 5px;
 }
 
 .tagOnCard {

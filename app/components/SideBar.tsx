@@ -5,10 +5,15 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Tooltip from '@material-ui/core/Tooltip';
 import Box from '@material-ui/core/Box';
 import AddIcon from '@material-ui/icons/Add';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import {
+  MoreVert,
+  DeleteOutline,
+  ArchiveOutlined,
+  LocalOfferOutlined,
+} from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Menu, MenuItem, Divider } from '@material-ui/core';
+import { Menu, MenuItem, Divider, ListItemIcon } from '@material-ui/core';
 import mousetrap from 'mousetrap';
 
 import clsx from 'clsx';
@@ -201,7 +206,7 @@ export default function SideBar() {
         <ThemeSwitch />
         <Tooltip title="Board actions" placement="right" arrow>
           <IconButton onClick={handleOpenMenu}>
-            <MoreVertIcon />
+            <MoreVert />
           </IconButton>
         </Tooltip>
         <Menu
@@ -211,8 +216,16 @@ export default function SideBar() {
           open={openMenu}
           onClose={handleCloseMenu}
         >
-          <MenuItem onClick={handleOpenManageTagsDialog}>Manage tags</MenuItem>
+          <MenuItem onClick={handleOpenManageTagsDialog}>
+            <ListItemIcon>
+              <LocalOfferOutlined />
+            </ListItemIcon>
+            Manage tags
+          </MenuItem>
           <MenuItem onClick={handleOpenArchivesDialog}>
+            <ListItemIcon>
+              <ArchiveOutlined />
+            </ListItemIcon>
             View archived cards
           </MenuItem>
           <Divider />
@@ -220,6 +233,9 @@ export default function SideBar() {
             onClick={handleDeleteBoard}
             disabled={boards.allIds.length < 2}
           >
+            <ListItemIcon>
+              <DeleteOutline />
+            </ListItemIcon>
             Delete current board
           </MenuItem>
         </Menu>

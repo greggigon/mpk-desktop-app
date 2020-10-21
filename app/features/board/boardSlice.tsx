@@ -31,13 +31,15 @@ const boardSlice = createSlice({
         cardTags,
       } = action.payload;
       const board = state.byId[action.selectedBoard];
+      const newCardNumber = board.cardsCounter + 1;
       addCardToBoard(
         board,
         title,
         description,
         columnId,
         addAtTheTop,
-        cardTags
+        cardTags,
+        newCardNumber
       );
     },
     deleteCard(state, action) {

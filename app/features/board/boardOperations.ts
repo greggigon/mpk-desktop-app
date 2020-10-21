@@ -31,9 +31,10 @@ export const addCardToBoard = (
   description,
   columnId,
   addAtTheTop,
-  cardTags
+  cardTags,
+  cardNumber
 ) => {
-  const card: Card = createCard(title, description, cardTags);
+  const card: Card = createCard(title, description, cardTags, cardNumber);
   board.cards.push(card);
   const columnToAddCardTo = board.columns.find((it) => it.id === columnId);
   if (addAtTheTop) {

@@ -18,6 +18,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import { fade, makeStyles } from '@material-ui/core/styles';
 import PropTypes, { InferProps } from 'prop-types';
+import { Card } from '../../model/cards';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,10 +70,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const mapTableContent = (archive, cards) => {
+const mapTableContent = (archive, cards: Array<Card>) => {
   return archive.map((entry) => {
-    const card = cards.find((c) => c.id === entry.cardId);
+    const card = cards.find((c: Card) => c.id === entry.cardId);
     return {
+      number: card.number,
       title: card.title,
       archivedOn: new Date(entry.archivedOn).toLocaleString(),
       id: card.id,
@@ -165,7 +167,7 @@ export default function CardsArchiveDialog(
             <TableBody>
               {tableContent.map((entry, index) => (
                 <TableRow key={entry.id}>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{`#${entry.number}`}</TableCell>
                   <TableCell>{entry.title}</TableCell>
                   <TableCell>{entry.archivedOn}</TableCell>
                 </TableRow>

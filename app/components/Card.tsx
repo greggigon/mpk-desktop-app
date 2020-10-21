@@ -33,7 +33,7 @@ interface KanbanCardProps {
 
 export default function KanbanCard(props: KanbanCardProps) {
   const { card, index, hasArchive, tags, onEditCard } = props;
-  const { id, title } = card;
+  const { id, title, number } = card;
   const hasTags = card.tags && card.tags.length > 0;
   const isFlagged = card.flag && card.flag.status;
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -91,7 +91,9 @@ export default function KanbanCard(props: KanbanCardProps) {
                 </div>
               )}
               <div className={styles.title}>
-                <Typography variant="subtitle1">{title}</Typography>
+                <div>
+                  <Typography variant="subtitle1">{title}</Typography>
+                </div>
               </div>
               <div className={styles.deleteButton}>
                 <IconButton onClick={openMenu}>
@@ -116,6 +118,9 @@ export default function KanbanCard(props: KanbanCardProps) {
                   )}
                   <MenuItem onClick={removeCard}>Delete</MenuItem>
                 </Menu>
+                <div className={styles.cardNumber}>
+                  <Typography variant="caption">{`#${number}`}</Typography>
+                </div>
               </div>
             </div>
             {showTagsOnCards && hasTags && (

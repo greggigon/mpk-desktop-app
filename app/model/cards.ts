@@ -12,6 +12,7 @@ export interface Card {
   lastModified: number;
   createdAt?: number;
   tags: Array<string>;
+  number: number;
 }
 
 const createFlag = (status = false) => {
@@ -21,7 +22,8 @@ const createFlag = (status = false) => {
 const createCard = (
   title: string,
   description: string,
-  tags: Array<string>
+  tags: Array<string>,
+  number: number
 ): Card => {
   return {
     title,
@@ -31,6 +33,7 @@ const createCard = (
     lastModified: Date.now(),
     createdAt: Date.now(),
     tags,
+    number,
   };
 };
 

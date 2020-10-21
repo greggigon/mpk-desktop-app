@@ -29,3 +29,7 @@
 .tagOnCard {
   margin: 5px;
 }
+
+.cardNumber {
+  text-align: center;
+}

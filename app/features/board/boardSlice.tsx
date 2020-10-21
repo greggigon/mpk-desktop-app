@@ -23,9 +23,22 @@ const boardSlice = createSlice({
       moveCardFromColumnToColumn(board, source, destination);
     },
     addCard(state, action) {
-      const { title, description, columnId, addAtTheTop } = action.payload;
+      const {
+        title,
+        description,
+        columnId,
+        addAtTheTop,
+        cardTags,
+      } = action.payload;
       const board = state.byId[action.selectedBoard];
-      addCardToBoard(board, title, description, columnId, addAtTheTop);
+      addCardToBoard(
+        board,
+        title,
+        description,
+        columnId,
+        addAtTheTop,
+        cardTags
+      );
     },
     deleteCard(state, action) {
       const board = state.byId[action.selectedBoard];
@@ -46,8 +59,8 @@ const boardSlice = createSlice({
     },
     updateCard(state, action) {
       const board = state.byId[action.selectedBoard];
-      const { title, description, cardId } = action.payload;
-      updateCardDetails(board.cards, cardId, title, description);
+      const { title, description, cardId, cardTags } = action.payload;
+      updateCardDetails(board.cards, cardId, title, description, cardTags);
     },
     updateColumn(state, action) {
       const board = state.byId[action.selectedBoard];

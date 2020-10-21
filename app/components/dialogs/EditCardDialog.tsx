@@ -7,33 +7,29 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import { Typography } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { useDispatch } from 'react-redux';
 
 import { updateCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
-import { RootState } from '../../store';
+import { Tag } from '../../model/board';
 import { Card } from '../../model/cards';
 
 interface EditCardDialogProperties {
-  cardId: string;
+  card: Card;
   open: boolean;
   onClose: () => void;
+  tags: Record<string, Tag>;
 }
-
-const selectCards = (state: RootState): Array<Card> => {
-  const selectedBoardId = state.app.selectedBoard;
-  return state.boards.byId[selectedBoardId].cards;
-};
 
 export default function EditCardDialog(props: EditCardDialogProperties) {
   const dispatch = useDispatch();
-  const cards = useSelector(selectCards);
-  const { cardId, open, onClose } = props;
-  const theCard = cards.find((card) => card.id === cardId);
+  const { card, open, onClose, tags } = props;
 
-  const [title, setTitle] = React.useState(theCard.title);
+  const [title, setTitle] = React.useState(card.title);
   const [titleError, setTitleError] = React.useState(false);
-  const [description, setDescription] = React.useState(theCard.description);
+  const [description, setDescription] = React.useState(card.description);
+  const [cardTags, setCardTags] = React.useState(card.tags);
 
   const titleChanged = (event) => {
     if (isBlank(event.target.value)) {
@@ -51,16 +47,27 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
   const performUpdate = (event) => {
     event.preventDefault();
     if (!isBlank(title)) {
-      dispatch(updateCard({ cardId, title, description }));
+      dispatch(updateCard({ cardId: card.id, title, description, cardTags }));
       onClose();
     } else {
       setTitleError(true);
     }
   };
 
-  const lastModified = theCard?.lastModified
-    ? new Date(theCard.lastModified).toLocaleString()
+  const handleTagsChanged = (event, value) => {
+    setCardTags(value.map((tag: Tag) => tag.id));
+  };
+
+  const lastModified = card?.lastModified
+    ? new Date(card.lastModified).toLocaleString()
     : 'Not tracked yet';
+
+  const tagIdsToTags = (ids: Array<string>): Array<Tag> => {
+    if (ids) {
+      return ids.map((id) => tags[id]);
+    }
+    return [];
+  };
 
   return (
     <Dialog
@@ -98,6 +105,25 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
               value={description}
             />
           </div>
+          <div style={{ marginTop: '10px' }}>
+            <Autocomplete
+              multiple
+              id="tags-outlined"
+              options={Object.values(tags)}
+              getOptionLabel={(tag: Tag) => tag.name}
+              filterSelectedOptions
+              onChange={handleTagsChanged}
+              value={tagIdsToTags(cardTags)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Tags"
+                  placeholder="Tags"
+                />
+              )}
+            />
+          </div>
           <div>
             <Typography variant="caption">
               Last changed on:&nbsp;
@@ -109,7 +135,7 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button type="submit" color="primary">
+          <Button type="submit" color="primary" variant="contained">
             Update
           </Button>
         </DialogActions>

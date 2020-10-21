@@ -30,9 +30,10 @@ export const addCardToBoard = (
   title,
   description,
   columnId,
-  addAtTheTop
+  addAtTheTop,
+  cardTags
 ) => {
-  const card: Card = createCard(title, description);
+  const card: Card = createCard(title, description, cardTags);
   board.cards.push(card);
   const columnToAddCardTo = board.columns.find((it) => it.id === columnId);
   if (addAtTheTop) {
@@ -54,11 +55,18 @@ export const removeCardFromBoard = (board, cardId) => {
   board.cards.splice(index, 1);
 };
 
-export const updateCardDetails = (cards, cardId, title, description) => {
+export const updateCardDetails = (
+  cards,
+  cardId,
+  title,
+  description,
+  cardTags
+) => {
   const card: Card = cards.find((it) => it.id === cardId);
   card.title = title;
   card.description = description;
   card.lastModified = Date.now();
+  card.tags = cardTags;
 };
 
 export const updateColumnDetails = (

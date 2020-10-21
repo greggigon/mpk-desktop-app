@@ -18,7 +18,11 @@ const createFlag = (status = false) => {
   return { status };
 };
 
-const createCard = (title: string, description: string): Card => {
+const createCard = (
+  title: string,
+  description: string,
+  tags: Array<string>
+): Card => {
   return {
     title,
     description,
@@ -26,7 +30,7 @@ const createCard = (title: string, description: string): Card => {
     flag: createFlag(),
     lastModified: Date.now(),
     createdAt: Date.now(),
-    tags: [],
+    tags,
   };
 };
 

@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import styles from './Column.css';
 import Card from './Card';
 import EditColumnDialog from './dialogs/EditColumnDialog';
-import { Column as ColumnType } from '../model/board';
+import { Column as ColumnType, Tag } from '../model/board';
 import { Card as CardType } from '../model/cards';
 
 interface ColumnProps {
@@ -16,6 +16,8 @@ interface ColumnProps {
   index: number;
   isLastColumn: boolean;
   cards: Array<CardType>;
+  tags: Record<string, Tag>;
+  onCardSelected: (card: CardType) => void;
 }
 
 const stylesForColumn = (theme) => {
@@ -28,7 +30,7 @@ const stylesForColumn = (theme) => {
 const useStyles = makeStyles((theme) => stylesForColumn(theme));
 
 export default function Column(props: ColumnProps) {
-  const { column, index, isLastColumn, cards } = props;
+  const { column, index, isLastColumn, cards, tags, onCardSelected } = props;
   const { title, id } = column;
   const [openEditColumn, setOpenEditColumn] = React.useState(false);
   const [isDropDisabled, setIsDropDisabled] = React.useState(false);
@@ -66,12 +68,12 @@ export default function Column(props: ColumnProps) {
           >
             {cards.map((card, cardIndex) => (
               <Card
-                title={card.title}
-                id={card.id}
+                card={card}
                 key={card.id}
                 index={cardIndex}
                 hasArchive={isLastColumn}
-                isFlagged={card.flag && card.flag.status}
+                tags={tags}
+                onEditCard={onCardSelected}
               />
             ))}
             {provided.placeholder}

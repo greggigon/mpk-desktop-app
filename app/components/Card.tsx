@@ -6,7 +6,6 @@ import { MoreVert, Flag } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
 import { Menu, MenuItem, Paper, Chip } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
-import PropTypes, { InferProps } from 'prop-types';
 
 import styles from './Card.css';
 import {
@@ -15,7 +14,8 @@ import {
   flagCard,
   unflagCard,
 } from '../features/board/boardSlice';
-import EditCardDialog from './dialogs/EditCardDialog';
+import { Card } from '../model/cards';
+import { Tag } from '../model/board';
 
 const selectIfTagsShouldShow = (state: RootState): boolean => {
   const { showTagsOnCards } = state.app;
@@ -23,12 +23,20 @@ const selectIfTagsShouldShow = (state: RootState): boolean => {
   return showTagsOnCards;
 };
 
-export default function KanbanCard(
-  props: InferProps<typeof KanbanCard.propTypes>
-) {
-  const { id, title, index, hasArchive, isFlagged } = props;
+interface KanbanCardProps {
+  card: Card;
+  index: number;
+  hasArchive: boolean;
+  tags: Record<string, Tag>;
+  onEditCard: (card: Card) => void;
+}
+
+export default function KanbanCard(props: KanbanCardProps) {
+  const { card, index, hasArchive, tags, onEditCard } = props;
+  const { id, title } = card;
+  const hasTags = card.tags && card.tags.length > 0;
+  const isFlagged = card.flag && card.flag.status;
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [editCardDialogOpen, setEditCardDialogOpen] = React.useState(false);
   const showTagsOnCards = useSelector(selectIfTagsShouldShow);
   const open = Boolean(anchorEl);
 
@@ -49,11 +57,7 @@ export default function KanbanCard(
 
   const editCard = () => {
     closeMenu();
-    setEditCardDialogOpen(true);
-  };
-
-  const closeEditDialogDialog = () => {
-    setEditCardDialogOpen(false);
+    onEditCard(card);
   };
 
   const archiveTheCard = () => {
@@ -83,7 +87,7 @@ export default function KanbanCard(
             <div className={styles.card}>
               {isFlagged && (
                 <div className={styles.flagContainer}>
-                  <Flag />
+                  <Flag color="secondary" />
                 </div>
               )}
               <div className={styles.title}>
@@ -114,37 +118,22 @@ export default function KanbanCard(
                 </Menu>
               </div>
             </div>
-            {showTagsOnCards && (
+            {showTagsOnCards && hasTags && (
               <div className={styles.tagsContainer}>
-                <Chip
-                  size="small"
-                  label="Kanban"
-                  className={styles.tagOnCard}
-                  style={{ backgroundColor: 'green' }}
-                />
+                {card.tags.map((tagId) => (
+                  <Chip
+                    key={tags[tagId].id}
+                    size="small"
+                    label={tags[tagId].name}
+                    className={styles.tagOnCard}
+                    style={{ backgroundColor: tags[tagId].color }}
+                  />
+                ))}
               </div>
             )}
           </Paper>
         )}
       </Draggable>
-      <EditCardDialog
-        cardId={id}
-        open={editCardDialogOpen}
-        onClose={closeEditDialogDialog}
-        key={`dialog-${id}`}
-      />
     </div>
   );
 }
-
-KanbanCard.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  hasArchive: PropTypes.bool.isRequired,
-  isFlagged: PropTypes.bool,
-};
-
-KanbanCard.defaultProps = {
-  isFlagged: false,
-};

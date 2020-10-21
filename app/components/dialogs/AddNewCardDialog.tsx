@@ -9,23 +9,31 @@ import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import PropTypes, { InferProps } from 'prop-types';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { useDispatch } from 'react-redux';
 import { addCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
+import { Tag } from '../../model/board';
 
-export default function AddNewCardDialog(
-  props: InferProps<typeof AddNewCardDialog.propTypes>
-) {
+interface AddNewCardDialogProps {
+  columnId: string;
+  columnTitle: string;
+  onClose: () => void;
+  onAdd: (column) => void;
+  tags: Record<string, Tag>;
+}
+
+export default function AddNewCardDialog(props: AddNewCardDialogProps) {
   const dispatch = useDispatch();
 
-  const { onClose, onAdd, columnId, columnTitle } = props;
+  const { onClose, onAdd, columnId, columnTitle, tags } = props;
   const [open, setOpen] = React.useState(false);
   const [addAtTheTop, setAddAtTheTop] = React.useState(true);
-  const [title, setTitle] = React.useState<string>();
+  const [title, setTitle] = React.useState('');
   const [titleError, setTitleError] = React.useState(false);
-  const [description, setDescription] = React.useState<string>();
+  const [description, setDescription] = React.useState('');
+  const [cardTags, setCardTags] = React.useState([]);
 
   if (columnId != null && !open) {
     setOpen(true);
@@ -47,10 +55,11 @@ export default function AddNewCardDialog(
           description,
           columnId,
           addAtTheTop,
+          cardTags,
         })
       );
       setOpen(false);
-      onAdd();
+      onAdd(null);
     } else {
       setTitleError(true);
     }
@@ -68,6 +77,10 @@ export default function AddNewCardDialog(
 
   const descriptionChanged = (event) => {
     setDescription(event.target.value);
+  };
+
+  const handleTagsChanged = (event, value) => {
+    setCardTags(value.map((tag: Tag) => tag.id));
   };
 
   if (columnId) {
@@ -118,6 +131,24 @@ export default function AddNewCardDialog(
                 onChange={descriptionChanged}
               />
             </div>
+            <div style={{ marginTop: '10px' }}>
+              <Autocomplete
+                multiple
+                id="tags-outlined"
+                options={Object.values(tags)}
+                getOptionLabel={(tag: Tag) => tag.name}
+                filterSelectedOptions
+                onChange={handleTagsChanged}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Tags"
+                    placeholder="Tags"
+                  />
+                )}
+              />
+            </div>
             <FormGroup row>
               <FormControlLabel
                 control={theSwitch}
@@ -129,7 +160,7 @@ export default function AddNewCardDialog(
             <Button onClick={handleCancel} color="primary">
               Cancel
             </Button>
-            <Button type="submit" color="primary">
+            <Button type="submit" color="primary" variant="contained">
               Add
             </Button>
           </DialogActions>
@@ -139,10 +170,3 @@ export default function AddNewCardDialog(
   }
   return null;
 }
-
-AddNewCardDialog.propTypes = {
-  columnId: PropTypes.string.isRequired,
-  columnTitle: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onAdd: PropTypes.func.isRequired,
-};

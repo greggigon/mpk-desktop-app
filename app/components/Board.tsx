@@ -15,6 +15,7 @@ import Column from './Column';
 import { moveCard } from '../features/board/boardSlice';
 import { RootState } from '../store';
 import AddNewCardDialog from './dialogs/AddNewCardDialog';
+import EditCardDialog from './dialogs/EditCardDialog';
 import { Board as BoardType, Column as ColumnType } from '../model/board';
 import { Card } from '../model/cards';
 
@@ -45,6 +46,7 @@ export default function Board() {
 
   const [open, setOpen] = React.useState(false);
   const [selectedColumn, setSelectedColumn] = React.useState(null);
+  const [selectedCard, setSelectedCard] = React.useState(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -76,6 +78,14 @@ export default function Board() {
       .filter((card) => card !== undefined);
   };
 
+  const handleEditDialogClosed = () => {
+    setSelectedCard(null);
+  };
+
+  const handleCardSelectedForEdit = (card: Card) => {
+    setSelectedCard(card);
+  };
+
   addKeyboardShortcutHandling(() => {
     const firstColumn = board.columns[0];
     handleAdd(firstColumn);
@@ -91,6 +101,8 @@ export default function Board() {
             key={`column-${column.id}`}
             index={index}
             isLastColumn={index + 1 === board.columns.length}
+            tags={board.tags.byId}
+            onCardSelected={handleCardSelectedForEdit}
           />
         ))}
       </DragDropContext>
@@ -119,6 +131,15 @@ export default function Board() {
           columnTitle={selectedColumn.title}
           onAdd={handleAdd}
           onClose={handleCancel}
+          tags={board.tags.byId}
+        />
+      )}
+      {selectedCard && (
+        <EditCardDialog
+          card={selectedCard}
+          open
+          onClose={handleEditDialogClosed}
+          tags={board.tags.byId}
         />
       )}
     </div>

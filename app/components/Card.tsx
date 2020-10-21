@@ -2,9 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Draggable } from 'react-beautiful-dnd';
 import IconButton from '@material-ui/core/IconButton';
+import DescriptionIcon from '@material-ui/icons/Description';
 import { MoreVert, Flag } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
-import { Menu, MenuItem, Paper, Chip } from '@material-ui/core';
+import { Menu, MenuItem, Paper, Chip, Tooltip } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 
 import styles from './Card.css';
@@ -16,6 +17,7 @@ import {
 } from '../features/board/boardSlice';
 import { Card } from '../model/cards';
 import { Tag } from '../model/board';
+import { isBlank } from '../utils/stringUtils';
 
 const selectIfTagsShouldShow = (state: RootState): boolean => {
   const { showTagsOnCards } = state.app;
@@ -39,6 +41,7 @@ export default function KanbanCard(props: KanbanCardProps) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const showTagsOnCards = useSelector(selectIfTagsShouldShow);
   const open = Boolean(anchorEl);
+  const hasDescription = !isBlank(card.description);
 
   const dispatch = useDispatch();
 
@@ -91,9 +94,14 @@ export default function KanbanCard(props: KanbanCardProps) {
                 </div>
               )}
               <div className={styles.title}>
-                <div>
-                  <Typography variant="subtitle1">{title}</Typography>
-                </div>
+                <Typography variant="subtitle1">{title}</Typography>
+              </div>
+              <div className={styles.extraIndicatorsContainer}>
+                {hasDescription && (
+                  <Tooltip title="This card has Description">
+                    <DescriptionIcon fontSize="small" />
+                  </Tooltip>
+                )}
               </div>
               <div className={styles.deleteButton}>
                 <IconButton onClick={openMenu}>

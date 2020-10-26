@@ -6,6 +6,7 @@ import { ThunkAction } from 'redux-thunk';
 // eslint-disable-next-line import/no-cycle
 import createRootReducer from './rootReducer';
 import createPersister from './features/persistance/filePersister';
+import eventsMiddleware from './features/events/eventMiddleware';
 
 export const history = createHashHistory();
 const rootReducer = createRootReducer(history);
@@ -24,7 +25,12 @@ const selectedBoardMiddleware = (store) => (next) => (action) => {
   return next(action);
 };
 
-const middleware = [...getDefaultMiddleware(), router, selectedBoardMiddleware];
+const middleware = [
+  ...getDefaultMiddleware(),
+  router,
+  selectedBoardMiddleware,
+  eventsMiddleware,
+];
 
 if (shouldIncludeLogger) {
   const logger = createLogger({

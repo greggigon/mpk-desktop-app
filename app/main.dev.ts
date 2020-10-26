@@ -11,7 +11,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -90,6 +90,13 @@ const createWindow = async () => {
       mainWindow.focus();
       mainWindow.maximize();
     }
+
+    ipcMain.on(
+      'board/board-changes',
+      (event: IpcMainEvent, boardTitle: string) => {
+        mainWindow?.setTitle(`My Personal Kanban - ${boardTitle}`);
+      }
+    );
   });
 
   mainWindow.on('closed', () => {

@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { addCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 import { Tag } from '../../model/board';
+import styles from './CardDialogs.css';
 
 interface AddNewCardDialogProps {
   columnId: string;
@@ -91,6 +92,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
         color="secondary"
       />
     );
+
     return (
       <Dialog
         open={open}
@@ -107,7 +109,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
             <DialogContentText>
               Fill out the details for your new card.
             </DialogContentText>
-            <div style={{ marginTop: '10px' }}>
+            <div className={styles.formElements}>
               <TextField
                 error={titleError}
                 fullWidth
@@ -120,7 +122,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
                 autoFocus
               />
             </div>
-            <div style={{ marginTop: '10px' }}>
+            <div className={styles.formElements}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -131,7 +133,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
                 onChange={descriptionChanged}
               />
             </div>
-            <div style={{ marginTop: '10px' }}>
+            <div className={styles.formElements}>
               <Autocomplete
                 multiple
                 id="tags-outlined"
@@ -149,20 +151,26 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
                 )}
               />
             </div>
-            <FormGroup row>
-              <FormControlLabel
-                control={theSwitch}
-                label="Add Card at the top of the Column"
-              />
-            </FormGroup>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancel} color="primary">
-              Cancel
-            </Button>
-            <Button type="submit" color="primary" variant="contained">
-              Add
-            </Button>
+          <DialogActions
+            style={{ justifyContent: 'space-between', padding: '8px 24px' }}
+          >
+            <div>
+              <FormGroup row>
+                <FormControlLabel
+                  control={theSwitch}
+                  label="Add Card at the top of the Column"
+                />
+              </FormGroup>
+            </div>
+            <div>
+              <Button onClick={handleCancel} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" color="primary" variant="contained">
+                Add
+              </Button>
+            </div>
           </DialogActions>
         </form>
       </Dialog>

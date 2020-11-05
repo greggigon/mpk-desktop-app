@@ -1,0 +1,19 @@
+.formElements {
+  margin-top: 10px;
+}
+
+.deadlineContainer {
+  margin-top: 10px;
+  flex: 0 0 auto;
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.datePicker {
+  width: 300px;
+}
+
+.deadlineSwitch {
+  margin-left: 20px;
+}

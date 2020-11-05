@@ -8,12 +8,18 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import { Typography } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import { useDispatch } from 'react-redux';
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFns from '@date-io/date-fns';
 
 import { updateCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 import { Tag } from '../../model/board';
 import { Card } from '../../model/cards';
+import styles from './CardDialogs.css';
 
 interface EditCardDialogProperties {
   card: Card;
@@ -21,6 +27,8 @@ interface EditCardDialogProperties {
   onClose: () => void;
   tags: Record<string, Tag>;
 }
+
+const dateFunctions = new DateFns();
 
 export default function EditCardDialog(props: EditCardDialogProperties) {
   const dispatch = useDispatch();
@@ -30,6 +38,10 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
   const [titleError, setTitleError] = React.useState(false);
   const [description, setDescription] = React.useState(card.description);
   const [cardTags, setCardTags] = React.useState(card.tags);
+  const [selectedDate, handleDateChange] = React.useState(
+    dateFunctions.addDays(new Date(), 1)
+  );
+  const [setDeadline, setSetDeadline] = React.useState(false);
 
   const titleChanged = (event) => {
     if (isBlank(event.target.value)) {
@@ -68,6 +80,13 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
     }
     return [];
   };
+  const switchForDeadline = (
+    <Switch
+      checked={setDeadline}
+      onChange={() => setSetDeadline(!setDeadline)}
+      color="primary"
+    />
+  );
 
   return (
     <Dialog
@@ -93,7 +112,7 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
               helperText="Card title can't be empty"
             />
           </div>
-          <div style={{ marginTop: '10px' }}>
+          <div className={styles.formElements}>
             <TextField
               fullWidth
               variant="outlined"
@@ -105,7 +124,7 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
               value={description}
             />
           </div>
-          <div style={{ marginTop: '10px' }}>
+          <div className={styles.formElements}>
             <Autocomplete
               multiple
               id="tags-outlined"
@@ -124,20 +143,42 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
               )}
             />
           </div>
+          <div className={styles.deadlineContainer}>
+            <MuiPickersUtilsProvider utils={DateFns}>
+              <DateTimePicker
+                label="Deadline"
+                inputVariant="outlined"
+                onChange={handleDateChange}
+                value={selectedDate}
+                className={styles.datePicker}
+                disabled={!setDeadline}
+              />
+            </MuiPickersUtilsProvider>
+            <FormGroup row className={styles.deadlineSwitch}>
+              <FormControlLabel
+                control={switchForDeadline}
+                label="Set deadline for card"
+              />
+            </FormGroup>
+          </div>
+        </DialogContent>
+        <DialogActions
+          style={{ justifyContent: 'space-between', padding: '8px 24px' }}
+        >
           <div>
             <Typography variant="caption">
               Last changed on:&nbsp;
               {lastModified}
             </Typography>
           </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="primary">
-            Cancel
-          </Button>
-          <Button type="submit" color="primary" variant="contained">
-            Update
-          </Button>
+          <div>
+            <Button onClick={onClose} color="primary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary" variant="contained">
+              Update
+            </Button>
+          </div>
         </DialogActions>
       </form>
     </Dialog>

@@ -30,6 +30,12 @@ interface EditCardDialogProperties {
 
 const dateFunctions = new DateFns();
 
+const cardOrDefaultDate = (card: Card) => {
+  return card.deadline
+    ? new Date(card.deadline)
+    : dateFunctions.addDays(new Date(), 7);
+};
+
 export default function EditCardDialog(props: EditCardDialogProperties) {
   const dispatch = useDispatch();
   const { card, open, onClose, tags } = props;
@@ -39,9 +45,9 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
   const [description, setDescription] = React.useState(card.description);
   const [cardTags, setCardTags] = React.useState(card.tags);
   const [selectedDate, handleDateChange] = React.useState(
-    dateFunctions.addDays(new Date(), 1)
+    cardOrDefaultDate(card)
   );
-  const [setDeadline, setSetDeadline] = React.useState(false);
+  const [setDeadline, setSetDeadline] = React.useState(card.deadline != null);
 
   const titleChanged = (event) => {
     if (isBlank(event.target.value)) {
@@ -59,7 +65,10 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
   const performUpdate = (event) => {
     event.preventDefault();
     if (!isBlank(title)) {
-      dispatch(updateCard({ cardId: card.id, title, description, cardTags }));
+      const deadline = setDeadline ? selectedDate.getTime() : null;
+      dispatch(
+        updateCard({ cardId: card.id, title, description, cardTags, deadline })
+      );
       onClose();
     } else {
       setTitleError(true);

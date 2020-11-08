@@ -61,8 +61,15 @@ const boardSlice = createSlice({
     },
     updateCard(state, action) {
       const board = state.byId[action.selectedBoard];
-      const { title, description, cardId, cardTags } = action.payload;
-      updateCardDetails(board.cards, cardId, title, description, cardTags);
+      const { title, description, cardId, cardTags, deadline } = action.payload;
+      updateCardDetails(
+        board.cards,
+        cardId,
+        title,
+        description,
+        cardTags,
+        deadline
+      );
     },
     updateColumn(state, action) {
       const board = state.byId[action.selectedBoard];

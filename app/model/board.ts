@@ -33,9 +33,10 @@ export interface Board {
   lastUpdated: number;
   tags: Tags;
   cardsCounter: number;
+  deadlines: Array<string>;
 }
 
-export const createTag = (name: string, color: string) => {
+export const createTag = (name: string, color: string): Tag => {
   return { name, color, id: uuidv4() };
 };
 
@@ -56,7 +57,8 @@ export const createNewBoard = (
     cards: [],
     archive: [],
     lastUpdated: Date.now(),
-    tags: { byId: {}, allIds: new Array<string>() },
+    tags: { byId: {}, allIds: [] },
     cardsCounter: 0,
+    deadlines: [],
   };
 };

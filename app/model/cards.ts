@@ -4,6 +4,8 @@ export interface Flag {
   status: boolean;
 }
 
+export type DateTimeInMiliseconds = number;
+
 export interface Card {
   title: string;
   description: string;
@@ -13,6 +15,7 @@ export interface Card {
   createdAt?: number;
   tags: Array<string>;
   number: number;
+  deadline?: DateTimeInMiliseconds;
 }
 
 const createFlag = (status = false) => {

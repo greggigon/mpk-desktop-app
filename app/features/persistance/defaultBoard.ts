@@ -3,14 +3,14 @@ import { Board } from '../../model/board';
 import { createCard } from '../../model/cards';
 
 const cards = [
-  createCard('Create first board', ''),
-  createCard('Add some cards to the board', ''),
-  createCard('Share My Personal Kanban with someone else', ''),
-  createCard('Experiment with the first board', ''),
-  createCard('Find a best Personal Kanban solution', ''),
-  createCard('Download My Personal Kanban', ''),
-  createCard('Install My Personal Kanban', ''),
-  createCard('Decide if Kanban is good for task managment', ''),
+  createCard('Create first board', '', [], 1),
+  createCard('Add some cards to the board', '', [], 2),
+  createCard('Share My Personal Kanban with someone else', '', [], 3),
+  createCard('Experiment with the first board', '', [], 4),
+  createCard('Find a best Personal Kanban solution', '', [], 5),
+  createCard('Download My Personal Kanban', '', [], 6),
+  createCard('Install My Personal Kanban', '', [], 7),
+  createCard('Decide if Kanban is good for task managment', '', [], 8),
 ];
 
 const cardsInFirstColumn = [cards[0].id, cards[1].id, cards[2].id];
@@ -31,6 +31,8 @@ const board: Board = {
   archive: [],
   lastUpdated: Date.now(),
   tags: { byId: {}, allIds: new Array<string>() },
+  deadlines: {},
+  cardsCounter: 9,
 };
 
 const boards = {

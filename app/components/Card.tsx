@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Draggable } from 'react-beautiful-dnd';
 import IconButton from '@material-ui/core/IconButton';
 import DescriptionIcon from '@material-ui/icons/Description';
-import { MoreVert, Flag } from '@material-ui/icons';
+import { MoreVert, Flag, Alarm } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
 import { Menu, MenuItem, Paper, Chip, Tooltip } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
@@ -28,13 +28,16 @@ const selectIfTagsShouldShow = (state: RootState): boolean => {
 interface KanbanCardProps {
   card: Card;
   index: number;
-  hasArchive: boolean;
+  hasArchive?: boolean;
   tags: Record<string, Tag>;
   onEditCard: (card: Card) => void;
+  showDeadline?: boolean;
 }
 
-export default function KanbanCard(props: KanbanCardProps) {
-  const { card, index, hasArchive, tags, onEditCard } = props;
+const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
+  props: KanbanCardProps
+) => {
+  const { card, index, hasArchive, tags, onEditCard, showDeadline } = props;
   const { id, title, number } = card;
   const hasTags = card.tags && card.tags.length > 0;
   const isFlagged = card.flag && card.flag.status;
@@ -42,6 +45,7 @@ export default function KanbanCard(props: KanbanCardProps) {
   const showTagsOnCards = useSelector(selectIfTagsShouldShow);
   const open = Boolean(anchorEl);
   const hasDescription = !isBlank(card.description);
+  const hasDeadline = card.deadline != null;
 
   const dispatch = useDispatch();
 
@@ -78,6 +82,13 @@ export default function KanbanCard(props: KanbanCardProps) {
     dispatch(unflagCard(id));
   };
 
+  const deadlineColor = (deadline) => {
+    if (new Date().getTime() > deadline) {
+      return 'secondary';
+    }
+    return 'deafault';
+  };
+
   return (
     <div>
       <Draggable draggableId={id} index={index}>
@@ -100,6 +111,14 @@ export default function KanbanCard(props: KanbanCardProps) {
                 {hasDescription && (
                   <Tooltip title="This card has Description">
                     <DescriptionIcon fontSize="small" />
+                  </Tooltip>
+                )}
+                {showDeadline && hasDeadline && (
+                  <Tooltip title="This card has Deadline">
+                    <Alarm
+                      fontSize="small"
+                      color={deadlineColor(card.deadline)}
+                    />
                   </Tooltip>
                 )}
               </div>
@@ -149,4 +168,11 @@ export default function KanbanCard(props: KanbanCardProps) {
       </Draggable>
     </div>
   );
-}
+};
+
+KanbanCard.defaultProps = {
+  showDeadline: true,
+  hasArchive: false,
+};
+
+export default KanbanCard;

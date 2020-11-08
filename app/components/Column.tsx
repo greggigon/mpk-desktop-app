@@ -74,6 +74,7 @@ export default function Column(props: ColumnProps) {
                 hasArchive={isLastColumn}
                 tags={tags}
                 onEditCard={onCardSelected}
+                showDeadline={!isLastColumn}
               />
             ))}
             {provided.placeholder}

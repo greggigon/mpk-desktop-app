@@ -41,6 +41,7 @@ const boardSlice = createSlice({
         cardTags,
         newCardNumber
       );
+      board.cardsCounter = newCardNumber;
     },
     deleteCard(state, action) {
       const board = state.byId[action.selectedBoard];

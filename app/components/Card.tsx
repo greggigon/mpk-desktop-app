@@ -25,6 +25,10 @@ const selectIfTagsShouldShow = (state: RootState): boolean => {
   return showTagsOnCards;
 };
 
+const isPastDeadline = (deadline) => {
+  return new Date().getTime() > deadline;
+};
+
 interface KanbanCardProps {
   card: Card;
   index: number;
@@ -46,7 +50,7 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
   const open = Boolean(anchorEl);
   const hasDescription = !isBlank(card.description);
   const hasDeadline = card.deadline != null;
-
+  const [deadlineColor, setDeadlineColor] = React.useState('inherit');
   const dispatch = useDispatch();
 
   const closeMenu = () => {
@@ -82,17 +86,18 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
     dispatch(unflagCard(id));
   };
 
-  const deadlineColor = (deadline) => {
-    if (new Date().getTime() > deadline) {
-      return 'secondary';
+  React.useEffect(() => {
+    if (card.deadline && showDeadline) {
+      if (isPastDeadline(card.deadline)) {
+        setDeadlineColor('secondary');
+      }
     }
-    return 'deafault';
-  };
+  }, [card.deadline, showDeadline, deadlineColor]);
 
   return (
     <div>
       <Draggable draggableId={id} index={index}>
-        {(provided, snapshot) => (
+        {(provided) => (
           <Paper
             ref={provided.innerRef}
             {...provided.draggableProps}
@@ -115,10 +120,7 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
                 )}
                 {showDeadline && hasDeadline && (
                   <Tooltip title="This card has Deadline">
-                    <Alarm
-                      fontSize="small"
-                      color={deadlineColor(card.deadline)}
-                    />
+                    <Alarm fontSize="small" color={deadlineColor} />
                   </Tooltip>
                 )}
               </div>

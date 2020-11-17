@@ -18,6 +18,7 @@ import AddNewCardDialog from './dialogs/AddNewCardDialog';
 import EditCardDialog from './dialogs/EditCardDialog';
 import { Board as BoardType, Column as ColumnType } from '../model/board';
 import { Card } from '../model/cards';
+import DeadlineChecker from './DeadlineChecker';
 
 const selectBoard = (state: RootState): BoardType => {
   const { selectedBoard } = state.app;
@@ -142,6 +143,7 @@ export default function Board() {
           tags={board.tags.byId}
         />
       )}
+      <DeadlineChecker board={board} />
     </div>
   );
 }

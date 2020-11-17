@@ -67,9 +67,12 @@ export const updateCardDetails = (
   const card: Card = cards.find((it) => it.id === cardId);
   card.title = title;
   card.description = description;
-  card.lastModified = Date.now();
   card.tags = cardTags;
-  card.deadline = deadline;
+  if (deadline !== card.deadline) {
+    card.deadline = deadline;
+    card.pastDeadline = false;
+  }
+  card.lastModified = Date.now();
 };
 
 export const updateColumnDetails = (

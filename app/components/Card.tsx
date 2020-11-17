@@ -25,10 +25,6 @@ const selectIfTagsShouldShow = (state: RootState): boolean => {
   return showTagsOnCards;
 };
 
-const isPastDeadline = (deadline) => {
-  return new Date().getTime() > deadline;
-};
-
 interface KanbanCardProps {
   card: Card;
   index: number;
@@ -88,11 +84,13 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
 
   React.useEffect(() => {
     if (card.deadline && showDeadline) {
-      if (isPastDeadline(card.deadline)) {
+      if (card.pastDeadline) {
         setDeadlineColor('secondary');
+      } else {
+        setDeadlineColor('inherit');
       }
     }
-  }, [card.deadline, showDeadline, deadlineColor]);
+  }, [card, showDeadline, deadlineColor]);
 
   return (
     <div>

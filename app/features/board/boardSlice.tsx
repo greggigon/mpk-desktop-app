@@ -115,6 +115,14 @@ const boardSlice = createSlice({
       const { name, color, id } = action.payload;
       updateTheTag(board, id, name, color);
     },
+    updateCardsPastDeadline(state, action) {
+      const board = state.byId[action.selectedBoard];
+      const cardIdsThatArePastDeadline = action.payload;
+      cardIdsThatArePastDeadline.forEach((cardId) => {
+        const card = board.cards.find((c) => c.id === cardId);
+        card.pastDeadline = true;
+      });
+    },
   },
 });
 
@@ -132,6 +140,7 @@ export const {
   addTag,
   deleteTag,
   updateTag,
+  updateCardsPastDeadline,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

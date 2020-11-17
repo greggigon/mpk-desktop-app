@@ -33,7 +33,6 @@ export interface Board {
   lastUpdated: number;
   tags: Tags;
   cardsCounter: number;
-  deadlines: Array<string>;
 }
 
 export const createTag = (name: string, color: string): Tag => {
@@ -59,6 +58,5 @@ export const createNewBoard = (
     lastUpdated: Date.now(),
     tags: { byId: {}, allIds: [] },
     cardsCounter: 0,
-    deadlines: [],
   };
 };

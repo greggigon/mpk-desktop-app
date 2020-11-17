@@ -11,11 +11,12 @@ export interface Card {
   description: string;
   id: string;
   flag: Flag;
-  lastModified: number;
+  lastModified: DateTimeInMiliseconds;
   createdAt?: number;
   tags: Array<string>;
   number: number;
   deadline?: DateTimeInMiliseconds;
+  pastDeadline?: boolean;
 }
 
 const createFlag = (status = false) => {

@@ -120,12 +120,16 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
               </div>
               <div className={styles.extraIndicatorsContainer}>
                 {hasDescription && (
-                  <Tooltip title="This card has Description">
+                  <Tooltip
+                    title="This card has more details in description"
+                    placement="bottom"
+                    arrow
+                  >
                     <DescriptionIcon fontSize="small" />
                   </Tooltip>
                 )}
                 {showDeadline && hasDeadline && (
-                  <Tooltip title={deadlineTooltip}>
+                  <Tooltip title={deadlineTooltip} placeholder="bottom" arrow>
                     <Alarm fontSize="small" color={deadlineColor} />
                   </Tooltip>
                 )}
@@ -141,7 +145,7 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
                   open={open}
                   onClose={closeMenu}
                 >
-                  <MenuItem onClick={editCard}>Edit</MenuItem>
+                  <MenuItem onClick={editCard}>Open</MenuItem>
                   {isFlagged ? (
                     <MenuItem onClick={handleUnflagIt}>Unflag it</MenuItem>
                   ) : (

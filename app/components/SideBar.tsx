@@ -31,6 +31,7 @@ import { RootState } from '../store';
 import { MAX_NUMBER_OF_BOARDS } from '../constants/appConfiguration';
 import ManageTagsDialog from './dialogs/ManageTagsDialog';
 import NewBoardDialog from './dialogs/NewBoardDialog';
+import ConfirmDialog from './dialogs/ConfirmDialog';
 
 const selectBoards = (state: RootState) => {
   return state.boards;
@@ -90,6 +91,7 @@ export default function SideBar() {
   const [archiveDialogOpen, setArchiveDialogOpen] = React.useState(false);
   const [openTagsDialog, setOpenTagsDialog] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [confirmDeleteDialog, setConfirmDeleteDialog] = React.useState(false);
 
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -116,16 +118,19 @@ export default function SideBar() {
     setOpenMenu(false);
   };
 
+  const confirmDeleteBoard = () => {
+    const newListOfIds = boards.allIds.slice();
+    const indexOfRemovedBoard = boards.allIds.indexOf(selectedBoardId);
+    newListOfIds.splice(indexOfRemovedBoard, 1);
+    dispatch(switchToBoard(newListOfIds[0]));
+    dispatch(deleteBoard(selectedBoardId));
+    setConfirmDeleteDialog(false);
+  };
+
   const handleDeleteBoard = () => {
     handleCloseMenu();
     if (boards.allIds.length === 1) return;
-    if (window.confirm('Are you sure, this operation is not reversible?')) {
-      const newListOfIds = boards.allIds.slice();
-      const indexOfRemovedBoard = boards.allIds.indexOf(selectedBoardId);
-      newListOfIds.splice(indexOfRemovedBoard, 1);
-      dispatch(switchToBoard(newListOfIds[0]));
-      dispatch(deleteBoard(selectedBoardId));
-    }
+    setConfirmDeleteDialog(true);
   };
 
   const handleCloseArchivesDialog = () => {
@@ -249,6 +254,13 @@ export default function SideBar() {
         onClose={handleCloseArchivesDialog}
         archive={board.archive}
         cards={board.cards}
+      />
+      <ConfirmDialog
+        open={confirmDeleteDialog}
+        onCancel={() => setConfirmDeleteDialog(false)}
+        onConfirm={confirmDeleteBoard}
+        message="Are you sure you would like to delete this board?"
+        dialogTitle="Delete board"
       />
     </div>
   );

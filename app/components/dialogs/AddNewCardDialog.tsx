@@ -176,5 +176,5 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
       </Dialog>
     );
   }
-  return null;
+  return <></>;
 }

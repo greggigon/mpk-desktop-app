@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 
 import { Board, Tag } from '../../model/board';
 import { addTag, deleteTag, updateTag } from '../../features/board/boardSlice';
+import ConfirmDialog from './ConfirmDialog';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +62,8 @@ export default function ManageTagsDialog(props: ManageTagsDialogProps) {
   const [tagText, setTagText] = React.useState('');
   const [tagTextPreview, setTagTextPreview] = React.useState('New tag');
   const [editedTag, setEditedTag] = React.useState();
+  const [confirmDeleteDialog, setConfirmDeleteDialog] = React.useState(false);
+  const [tagToBeDeleted, setTagToBeDeleted] = React.useState(null);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -94,13 +97,20 @@ export default function ManageTagsDialog(props: ManageTagsDialogProps) {
     }
   };
 
+  const confirmDeleteTag = () => {
+    dispatch(deleteTag(tagToBeDeleted));
+    setConfirmDeleteDialog(false);
+    setTagToBeDeleted(null);
+  };
+
   const handleDeleteTag = (tagId) => {
-    const confirmed = window.confirm(
-      'Are you sure? Removing the tag will remove it from all the cards as well.'
-    );
-    if (confirmed) {
-      dispatch(deleteTag(tagId));
-    }
+    setConfirmDeleteDialog(true);
+    setTagToBeDeleted(tagId);
+  };
+
+  const cancelTagDeleteConfirm = () => {
+    setConfirmDeleteDialog(false);
+    setTagToBeDeleted(null);
   };
 
   const handleTagClicked = (tag: Tag) => {
@@ -206,6 +216,13 @@ export default function ManageTagsDialog(props: ManageTagsDialogProps) {
           ))}
         </div>
       </DialogContent>
+      <ConfirmDialog
+        open={confirmDeleteDialog}
+        message="Are you sure? Removing the tag will remove it from all the cards as well."
+        dialogTitle="Delete tag"
+        onCancel={cancelTagDeleteConfirm}
+        onConfirm={confirmDeleteTag}
+      />
     </Dialog>
   );
 }

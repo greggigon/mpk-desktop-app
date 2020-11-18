@@ -129,7 +129,7 @@ export default function EditColumnDialog(props: EditColumnDialogProps) {
           <Button onClick={closeDialog} color="primary">
             Cancel
           </Button>
-          <Button type="submit" color="primary">
+          <Button type="submit" color="primary" variant="contained">
             Update
           </Button>
         </DialogActions>

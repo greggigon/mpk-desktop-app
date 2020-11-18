@@ -47,6 +47,9 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
   const hasDescription = !isBlank(card.description);
   const hasDeadline = card.deadline != null;
   const [deadlineColor, setDeadlineColor] = React.useState('inherit');
+  const [deadlineTooltip, setDeadlineTooltip] = React.useState(
+    'This card has a deadline'
+  );
   const dispatch = useDispatch();
 
   const closeMenu = () => {
@@ -84,10 +87,15 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
 
   React.useEffect(() => {
     if (card.deadline && showDeadline) {
+      const deadlineString = new Date(card.deadline).toLocaleString();
       if (card.pastDeadline) {
         setDeadlineColor('secondary');
+        const tooltip = `This card is past the deadline ${deadlineString}`;
+        setDeadlineTooltip(tooltip);
       } else {
         setDeadlineColor('inherit');
+        const tooltip = `This card has deadline of ${deadlineString}`;
+        setDeadlineTooltip(tooltip);
       }
     }
   }, [card, showDeadline, deadlineColor]);
@@ -117,7 +125,7 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
                   </Tooltip>
                 )}
                 {showDeadline && hasDeadline && (
-                  <Tooltip title="This card has Deadline">
+                  <Tooltip title={deadlineTooltip}>
                     <Alarm fontSize="small" color={deadlineColor} />
                   </Tooltip>
                 )}

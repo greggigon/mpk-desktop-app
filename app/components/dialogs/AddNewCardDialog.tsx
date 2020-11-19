@@ -1,10 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -15,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { addCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 import { Tag } from '../../model/board';
+import ExpandableDialog from './ExpandableDialog';
 import styles from './CardDialogs.css';
 
 interface AddNewCardDialogProps {
@@ -35,6 +34,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
   const [titleError, setTitleError] = React.useState(false);
   const [description, setDescription] = React.useState('');
   const [cardTags, setCardTags] = React.useState([]);
+  const [descRows, setDescRows] = React.useState(3);
 
   if (columnId != null && !open) {
     setOpen(true);
@@ -84,6 +84,14 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
     setCardTags(value.map((tag: Tag) => tag.id));
   };
 
+  const changeDialogSize = (size: 'md' | 'xl') => {
+    if (size === 'xl') {
+      setDescRows(20);
+    } else {
+      setDescRows(3);
+    }
+  };
+
   if (columnId) {
     const theSwitch = (
       <Switch
@@ -92,19 +100,15 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
         color="secondary"
       />
     );
-
+    const dialogTitle = `Add new card to Column: ${columnTitle}`;
     return (
-      <Dialog
+      <ExpandableDialog
         open={open}
-        aria-labelledby="form-dialog-title"
-        fullWidth
         onClose={handleCancel}
+        onDialogSizeChanged={changeDialogSize}
+        title={dialogTitle}
       >
         <form onSubmit={handleAddCard}>
-          <DialogTitle id="form-dialog-title">
-            Add new card to Column:
-            <strong>{columnTitle}</strong>
-          </DialogTitle>
           <DialogContent>
             <DialogContentText>
               Fill out the details for your new card.
@@ -128,7 +132,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
                 variant="outlined"
                 multiline
                 placeholder="Description"
-                rows={4}
+                rows={descRows}
                 label="Description"
                 onChange={descriptionChanged}
               />
@@ -173,7 +177,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
             </div>
           </DialogActions>
         </form>
-      </Dialog>
+      </ExpandableDialog>
     );
   }
   return <></>;

@@ -3,10 +3,9 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import { Typography } from '@material-ui/core';
+import { Typography, Tooltip, IconButton } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -14,6 +13,7 @@ import Switch from '@material-ui/core/Switch';
 import { useDispatch } from 'react-redux';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFns from '@date-io/date-fns';
+import { Fullscreen, FullscreenExit } from '@material-ui/icons';
 
 import { updateCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
@@ -48,6 +48,9 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
     cardOrDefaultDate(card)
   );
   const [setDeadline, setSetDeadline] = React.useState(card.deadline != null);
+  const [dialogSize, setDialogSize] = React.useState('md');
+  const [dialogMaximised, setDialogMaximised] = React.useState(false);
+  const [descRows, setDescRows] = React.useState(3);
 
   const titleChanged = (event) => {
     if (isBlank(event.target.value)) {
@@ -97,17 +100,52 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
     />
   );
 
+  const changeDialogSize = () => {
+    if (dialogSize === 'md') {
+      setDialogSize('xl');
+      setDialogMaximised(true);
+      setDescRows(20);
+    } else {
+      setDialogSize('md');
+      setDialogMaximised(false);
+      setDescRows(3);
+    }
+  };
+
   return (
     <Dialog
       open={open}
       aria-labelledby="form-dialog-title"
       fullWidth
+      maxWidth={dialogSize}
       onClose={onClose}
     >
       <form onSubmit={performUpdate}>
-        <DialogTitle id="form-dialog-title">Edit card</DialogTitle>
+        <div style={{ justifyContent: 'space-between', display: 'flex' }}>
+          <DialogTitle id="form-dialog-title">Edit card</DialogTitle>
+          <div style={{ padding: '5px' }}>
+            {dialogMaximised ? (
+              <Tooltip title="Minimase dialog" placement="top" arrow>
+                <IconButton
+                  aria-label="resize-dialog"
+                  onClick={changeDialogSize}
+                >
+                  <FullscreenExit />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Maximise dialog" placement="top" arrow>
+                <IconButton
+                  aria-label="resize-dialog"
+                  onClick={changeDialogSize}
+                >
+                  <Fullscreen />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        </div>
         <DialogContent>
-          <DialogContentText>Edit card details.</DialogContentText>
           <div style={{ marginTop: '10px' }}>
             <TextField
               fullWidth
@@ -127,7 +165,7 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
               variant="outlined"
               multiline
               placeholder="Description"
-              rows={4}
+              rows={descRows}
               label="Description"
               onChange={descriptionChanged}
               value={description}

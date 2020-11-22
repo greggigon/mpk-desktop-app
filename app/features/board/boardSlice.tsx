@@ -11,6 +11,7 @@ import {
   addNewTag,
   deleteTheTag,
   updateTheTag,
+  updateCardTask,
 } from './boardOperations';
 
 const boardSlice = createSlice({
@@ -123,6 +124,12 @@ const boardSlice = createSlice({
         card.pastDeadline = true;
       });
     },
+    updateCardsTask(state, action) {
+      const board = state.byId[action.selectedBoard];
+      const { cardId, taskIndex, taskDone } = action.payload;
+      const card = board.cards.find((c) => c.id === cardId);
+      updateCardTask(card, taskIndex, taskDone);
+    },
   },
 });
 
@@ -141,6 +148,7 @@ export const {
   deleteTag,
   updateTag,
   updateCardsPastDeadline,
+  updateCardsTask,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

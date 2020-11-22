@@ -19,6 +19,12 @@ export interface Card {
   pastDeadline?: boolean;
 }
 
+export interface Task {
+  done: boolean;
+  content: string;
+  index: number;
+}
+
 const createFlag = (status = false) => {
   return { status };
 };

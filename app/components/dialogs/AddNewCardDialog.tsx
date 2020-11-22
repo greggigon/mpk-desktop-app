@@ -34,7 +34,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
   const [titleError, setTitleError] = React.useState(false);
   const [description, setDescription] = React.useState('');
   const [cardTags, setCardTags] = React.useState([]);
-  const [descRows, setDescRows] = React.useState(3);
+  const [descRows, setDescRows] = React.useState(5);
 
   if (columnId != null && !open) {
     setOpen(true);

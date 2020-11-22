@@ -27,6 +27,7 @@ import styles from './SideBar.css';
 import CardsArchiveDialog from './dialogs/CardsArchiveDialog';
 import ThemeSwitch from './ThemeSwitch';
 import TagsSwitch from './TagsSwitch';
+import SubtaskSwitch from './SubtasksSwitch';
 import { RootState } from '../store';
 import { MAX_NUMBER_OF_BOARDS } from '../constants/appConfiguration';
 import ManageTagsDialog from './dialogs/ManageTagsDialog';
@@ -207,6 +208,7 @@ export default function SideBar() {
       </Box>
 
       <Box className={styles.boardMenu}>
+        <SubtaskSwitch />
         <TagsSwitch />
         <ThemeSwitch />
         <Tooltip title="Board actions" placement="right" arrow>

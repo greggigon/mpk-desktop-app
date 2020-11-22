@@ -28,6 +28,7 @@ const loadedData = (appDataPath: string) => {
     selectedBoard: defaultBoard.allIds[0],
     theme: 'dark',
     showTagsOnCards: false,
+    showTasksOnCard: false,
   });
 
   const boards = migrate(JSON.parse(fs.readFileSync(boardsFile, 'UTF-8')));

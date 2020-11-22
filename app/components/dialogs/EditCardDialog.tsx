@@ -46,7 +46,7 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
     cardOrDefaultDate(card)
   );
   const [setDeadline, setSetDeadline] = React.useState(card.deadline != null);
-  const [descRows, setDescRows] = React.useState(3);
+  const [descRows, setDescRows] = React.useState(5);
 
   const titleChanged = (event) => {
     if (isBlank(event.target.value)) {

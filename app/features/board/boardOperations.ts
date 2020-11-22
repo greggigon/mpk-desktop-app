@@ -1,5 +1,6 @@
 import { Board, ColumnOptions, createTag } from '../../model/board';
-import { Card, createCard, createFlag } from '../../model/cards';
+import { Card, Task, createCard, createFlag } from '../../model/cards';
+import { extractTasks } from '../../utils/stringUtils';
 
 export const moveCardFromColumnToColumn = (board, source, destination) => {
   if (destination == null) {
@@ -138,4 +139,26 @@ export const updateTheTag = (
   const theTag = board.tags.byId[id];
   theTag.name = name;
   theTag.color = color;
+};
+
+export const updateCardTask = (
+  card: Card,
+  taskIndex: number,
+  taskDone: boolean
+) => {
+  const tasks: Array<Task> = extractTasks(card.description);
+  const taskContent = tasks[taskIndex].content;
+  const regexReplacement = new RegExp(`-.?\\[(.*)\\].*${taskContent}`, 'g');
+
+  if (taskDone) {
+    card.description = card.description.replace(
+      regexReplacement,
+      `- [x] ${taskContent}`
+    );
+  } else {
+    card.description = card.description.replace(
+      regexReplacement,
+      `- [ ] ${taskContent}`
+    );
+  }
 };

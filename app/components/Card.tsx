@@ -9,6 +9,7 @@ import { Menu, MenuItem, Paper, Chip, Tooltip } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 
 import styles from './Card.css';
+import CardTasks from './CardTasks';
 import {
   deleteCard,
   archiveCard,
@@ -23,6 +24,12 @@ const selectIfTagsShouldShow = (state: RootState): boolean => {
   const { showTagsOnCards } = state.app;
   if (showTagsOnCards === undefined) return false;
   return showTagsOnCards;
+};
+
+const selectIfTasksShouldShow = (state: RootState): boolean => {
+  const { showTasksOnCards } = state.app;
+  if (showTasksOnCards === undefined) return false;
+  return showTasksOnCards;
 };
 
 interface KanbanCardProps {
@@ -43,6 +50,7 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
   const isFlagged = card.flag && card.flag.status;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const showTagsOnCards = useSelector(selectIfTagsShouldShow);
+  const showTasksOnCards = useSelector(selectIfTasksShouldShow);
   const open = Boolean(anchorEl);
   const hasDescription = !isBlank(card.description);
   const hasDeadline = card.deadline != null;
@@ -174,6 +182,9 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
                   />
                 ))}
               </div>
+            )}
+            {showTasksOnCards && (
+              <CardTasks cardId={card.id} description={card.description} />
             )}
           </Paper>
         )}

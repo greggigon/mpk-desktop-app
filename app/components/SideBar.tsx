@@ -255,7 +255,6 @@ export default function SideBar() {
         open={archiveDialogOpen}
         onClose={handleCloseArchivesDialog}
         archive={board.archive}
-        cards={board.cards}
       />
       <ConfirmDialog
         open={confirmDeleteDialog}

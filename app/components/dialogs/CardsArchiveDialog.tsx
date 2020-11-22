@@ -18,7 +18,6 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import { fade, makeStyles } from '@material-ui/core/styles';
 import PropTypes, { InferProps } from 'prop-types';
-import { Card } from '../../model/cards';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,9 +69,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const mapTableContent = (archive, cards: Array<Card>) => {
+const mapTableContent = (archive) => {
   return archive.map((entry) => {
-    const card = cards.find((c: Card) => c.id === entry.cardId);
+    const { card } = entry;
     return {
       number: card.number,
       title: card.title,
@@ -85,16 +84,16 @@ const mapTableContent = (archive, cards: Array<Card>) => {
 export default function CardsArchiveDialog(
   props: InferProps<typeof CardsArchiveDialog.propTypes>
 ) {
-  const { open, onClose, archive, cards } = props;
+  const { open, onClose, archive } = props;
   const classes = useStyles();
 
   const [searchTerm, setSearchTerm] = React.useState('');
   const [tableContent, setTableContent] = React.useState([]);
 
   React.useEffect(() => {
-    const initialContent = mapTableContent(archive, cards);
+    const initialContent = mapTableContent(archive);
     setTableContent(initialContent);
-  }, [archive, cards]);
+  }, [archive]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -103,7 +102,7 @@ export default function CardsArchiveDialog(
   const handleSubmit = (event) => {
     event.preventDefault();
     const regex = new RegExp(`${searchTerm}`, 'igm');
-    const filteredArchive = mapTableContent(archive, cards).filter((entry) =>
+    const filteredArchive = mapTableContent(archive).filter((entry) =>
       regex.test(entry.title)
     );
     setTableContent(filteredArchive);
@@ -165,7 +164,7 @@ export default function CardsArchiveDialog(
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableContent.map((entry, index) => (
+              {tableContent.map((entry) => (
                 <TableRow key={entry.id}>
                   <TableCell>{`#${entry.number}`}</TableCell>
                   <TableCell>{entry.title}</TableCell>
@@ -184,5 +183,4 @@ CardsArchiveDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   archive: PropTypes.arrayOf(Object).isRequired,
-  cards: PropTypes.arrayOf(Object).isRequired,
 };

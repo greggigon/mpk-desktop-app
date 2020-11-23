@@ -100,7 +100,9 @@ export const archiveTheCard = (board, cardId) => {
       column.cards.splice(indexOfCard, 1);
     }
   });
-  board.archive.push({ cardId, archivedOn: Date.now() });
+  const cardIndex = board.cards.findIndex((card) => card.id === cardId);
+  const card = board.cards.splice(cardIndex, 1)[0];
+  board.archive.push({ cardId, archivedOn: Date.now(), card });
 };
 
 export const setCardFlag = (cards, cardId, flag: boolean) => {

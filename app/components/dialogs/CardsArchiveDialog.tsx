@@ -72,6 +72,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const mapTableContent = (archive) => {
   return archive.map((entry) => {
     const { card } = entry;
+    if (!card) console.log(entry);
     return {
       number: card.number,
       title: card.title,

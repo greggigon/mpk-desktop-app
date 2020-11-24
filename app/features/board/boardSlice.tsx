@@ -12,6 +12,7 @@ import {
   deleteTheTag,
   updateTheTag,
   updateCardTask,
+  moveCardFromBoardToBoard,
 } from './boardOperations';
 
 const boardSlice = createSlice({
@@ -130,6 +131,11 @@ const boardSlice = createSlice({
       const card = board.cards.find((c) => c.id === cardId);
       updateCardTask(card, taskIndex, taskDone);
     },
+    moveCardToBoard(state, action) {
+      const board = state.byId[action.selectedBoard];
+      const { cardId, boardId, atTheTop } = action.payload;
+      moveCardFromBoardToBoard(state.byId, cardId, board, boardId, atTheTop);
+    },
   },
 });
 
@@ -149,6 +155,7 @@ export const {
   updateTag,
   updateCardsPastDeadline,
   updateCardsTask,
+  moveCardToBoard,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

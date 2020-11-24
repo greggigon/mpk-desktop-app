@@ -2,6 +2,28 @@ import { Board, ColumnOptions, createTag } from '../../model/board';
 import { Card, Task, createCard, createFlag } from '../../model/cards';
 import { extractTasks } from '../../utils/stringUtils';
 
+const removeCardWithIdFromColumn = (board, cardId) => {
+  board.columns.forEach((column) => {
+    const indexOfCard = column.cards.indexOf(cardId);
+    if (indexOfCard > -1) {
+      column.cards.splice(indexOfCard, 1);
+    }
+  });
+};
+
+const findIndexOfCardInBoardCards = (board, cardId) => {
+  return board.cards.findIndex((card: Card) => card.id === cardId);
+};
+
+const addCardToColumnAtTopOrBottom = (column, cardId, addAtTheTop) => {
+  if (addAtTheTop) {
+    column.cards.splice(0, 0, cardId);
+  } else {
+    const indexToAddCardAt = column.cards.length;
+    column.cards.splice(indexToAddCardAt, 0, cardId);
+  }
+};
+
 export const moveCardFromColumnToColumn = (board, source, destination) => {
   if (destination == null) {
     return;
@@ -38,21 +60,11 @@ export const addCardToBoard = (
   const card: Card = createCard(title, description, cardTags, cardNumber);
   board.cards.push(card);
   const columnToAddCardTo = board.columns.find((it) => it.id === columnId);
-  if (addAtTheTop) {
-    columnToAddCardTo.cards.splice(0, 0, card.id);
-  } else {
-    const indexToAddCardAt = columnToAddCardTo.cards.length;
-    columnToAddCardTo.cards.splice(indexToAddCardAt, 0, card.id);
-  }
+  addCardToColumnAtTopOrBottom(columnToAddCardTo, card.id, addAtTheTop);
 };
 
 export const removeCardFromBoard = (board, cardId) => {
-  board.columns.forEach((column) => {
-    const indexOfCard = column.cards.indexOf(cardId);
-    if (indexOfCard > -1) {
-      column.cards.splice(indexOfCard, 1);
-    }
-  });
+  removeCardWithIdFromColumn(board, cardId);
   const index = board.cards.findIndex((card) => card.id === cardId);
   board.cards.splice(index, 1);
 };
@@ -94,12 +106,7 @@ export const updateColumnDetails = (
 };
 
 export const archiveTheCard = (board, cardId) => {
-  board.columns.forEach((column) => {
-    const indexOfCard = column.cards.indexOf(cardId);
-    if (indexOfCard > -1) {
-      column.cards.splice(indexOfCard, 1);
-    }
-  });
+  removeCardWithIdFromColumn(board, cardId);
   const cardIndex = board.cards.findIndex((card) => card.id === cardId);
   const card = board.cards.splice(cardIndex, 1)[0];
   board.archive.push({ cardId, archivedOn: Date.now(), card });
@@ -163,4 +170,21 @@ export const updateCardTask = (
       `- [ ] ${taskContent}`
     );
   }
+};
+
+export const moveCardFromBoardToBoard = (
+  boardsById,
+  cardId,
+  fromBoard,
+  toBoardId,
+  addAtTheTop
+) => {
+  removeCardWithIdFromColumn(fromBoard, cardId);
+  const cardIndex = findIndexOfCardInBoardCards(fromBoard, cardId);
+  const theCard = fromBoard.cards.splice(cardIndex, 1)[0];
+  const toBoard: Board = boardsById[toBoardId];
+  const firstColumn = toBoard.columns[0];
+
+  toBoard.cards.push(theCard);
+  addCardToColumnAtTopOrBottom(firstColumn, theCard.id, addAtTheTop);
 };

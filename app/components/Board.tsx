@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,7 +18,9 @@ import AddNewCardDialog from './dialogs/AddNewCardDialog';
 import EditCardDialog from './dialogs/EditCardDialog';
 import { Board as BoardType, Column as ColumnType } from '../model/board';
 import { Card } from '../model/cards';
+import { SelectedCardAndAction } from './viewModels';
 import DeadlineChecker from './DeadlineChecker';
+import MoveCardToBoardDialog from './dialogs/MoveCardToBoardDialog';
 
 const selectBoard = (state: RootState): BoardType => {
   const { selectedBoard } = state.app;
@@ -45,9 +47,12 @@ export default function Board() {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(false);
-  const [selectedColumn, setSelectedColumn] = React.useState(null);
-  const [selectedCard, setSelectedCard] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedColumn, setSelectedColumn] = useState(null);
+  const [
+    selectedCardAndAction,
+    setSelectedCardAndAction,
+  ] = useState<SelectedCardAndAction | null>(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -80,11 +85,13 @@ export default function Board() {
   };
 
   const handleEditDialogClosed = () => {
-    setSelectedCard(null);
+    setSelectedCardAndAction(null);
   };
 
-  const handleCardSelectedForEdit = (card: Card) => {
-    setSelectedCard(card);
+  const handleCardSelectedForAction = (
+    cardAndAction: SelectedCardAndAction
+  ) => {
+    setSelectedCardAndAction(cardAndAction);
   };
 
   addKeyboardShortcutHandling(() => {
@@ -103,7 +110,7 @@ export default function Board() {
             index={index}
             isLastColumn={index + 1 === board.columns.length}
             tags={board.tags.byId}
-            onCardSelected={handleCardSelectedForEdit}
+            onCardSelected={handleCardSelectedForAction}
           />
         ))}
       </DragDropContext>
@@ -135,14 +142,23 @@ export default function Board() {
           tags={board.tags.byId}
         />
       )}
-      {selectedCard && (
+      {selectedCardAndAction && selectedCardAndAction.action === 'edit' && (
         <EditCardDialog
-          card={selectedCard}
+          card={selectedCardAndAction.card}
           open
           onClose={handleEditDialogClosed}
           tags={board.tags.byId}
         />
       )}
+      {selectedCardAndAction &&
+        selectedCardAndAction.action === 'moveBetweenBoard' && (
+          <MoveCardToBoardDialog
+            open
+            card={selectedCardAndAction.card}
+            onConfirm={handleEditDialogClosed}
+            onCancel={handleEditDialogClosed}
+          />
+        )}
       <DeadlineChecker board={board} />
     </div>
   );

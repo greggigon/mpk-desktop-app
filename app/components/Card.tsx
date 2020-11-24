@@ -18,6 +18,7 @@ import {
 } from '../features/board/boardSlice';
 import { Card } from '../model/cards';
 import { Tag } from '../model/board';
+import { SelectedCardAndAction } from './viewModels';
 import { isBlank } from '../utils/stringUtils';
 
 const selectIfTagsShouldShow = (state: RootState): boolean => {
@@ -37,14 +38,14 @@ interface KanbanCardProps {
   index: number;
   hasArchive?: boolean;
   tags: Record<string, Tag>;
-  onEditCard: (card: Card) => void;
+  onCardSelected: (cardAndAction: SelectedCardAndAction) => void;
   showDeadline?: boolean;
 }
 
 const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
   props: KanbanCardProps
 ) => {
-  const { card, index, hasArchive, tags, onEditCard, showDeadline } = props;
+  const { card, index, hasArchive, tags, onCardSelected, showDeadline } = props;
   const { id, title, number } = card;
   const hasTags = card.tags && card.tags.length > 0;
   const isFlagged = card.flag && card.flag.status;
@@ -75,7 +76,7 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
 
   const editCard = () => {
     closeMenu();
-    onEditCard(card);
+    onCardSelected({ card, action: 'edit' });
   };
 
   const archiveTheCard = () => {
@@ -91,6 +92,11 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
   const handleUnflagIt = () => {
     closeMenu();
     dispatch(unflagCard(id));
+  };
+
+  const handleMoveCardToBoard = () => {
+    onCardSelected({ card, action: 'moveBetweenBoard' });
+    closeMenu();
   };
 
   React.useEffect(() => {
@@ -163,6 +169,9 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
                   {hasArchive && (
                     <MenuItem onClick={archiveTheCard}>Archive</MenuItem>
                   )}
+                  <MenuItem onClick={handleMoveCardToBoard}>
+                    Move to board ...
+                  </MenuItem>
                   <MenuItem onClick={removeCard}>Delete</MenuItem>
                 </Menu>
                 <div className={styles.cardNumber}>

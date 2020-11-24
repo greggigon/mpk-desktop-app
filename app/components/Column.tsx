@@ -10,6 +10,7 @@ import Card from './Card';
 import EditColumnDialog from './dialogs/EditColumnDialog';
 import { Column as ColumnType, Tag } from '../model/board';
 import { Card as CardType } from '../model/cards';
+import { SelectedCardAndAction } from './viewModels';
 
 interface ColumnProps {
   column: ColumnType;
@@ -17,7 +18,7 @@ interface ColumnProps {
   isLastColumn: boolean;
   cards: Array<CardType>;
   tags: Record<string, Tag>;
-  onCardSelected: (card: CardType) => void;
+  onCardSelected: (cardAndAction: SelectedCardAndAction) => void;
 }
 
 const stylesForColumn = (theme) => {
@@ -73,7 +74,7 @@ export default function Column(props: ColumnProps) {
                 index={cardIndex}
                 hasArchive={isLastColumn}
                 tags={tags}
-                onEditCard={onCardSelected}
+                onCardSelected={onCardSelected}
                 showDeadline={!isLastColumn}
               />
             ))}

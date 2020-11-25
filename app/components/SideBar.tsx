@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -10,6 +10,7 @@ import {
   DeleteOutline,
   ArchiveOutlined,
   LocalOfferOutlined,
+  EditOutlined,
 } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -33,6 +34,8 @@ import { MAX_NUMBER_OF_BOARDS } from '../constants/appConfiguration';
 import ManageTagsDialog from './dialogs/ManageTagsDialog';
 import NewBoardDialog from './dialogs/NewBoardDialog';
 import ConfirmDialog from './dialogs/ConfirmDialog';
+import RenameBoardDialog from './dialogs/RenameBoardDialog';
+import { Board } from '../model/board';
 
 const selectBoards = (state: RootState) => {
   return state.boards;
@@ -84,15 +87,16 @@ const getBoardDown = (boards, selectedBoardId) => {
 export default function SideBar() {
   const boards = useSelector(selectBoards);
   const selectedBoardId = useSelector(selectedBoard);
-  const board = boards.byId[selectedBoardId];
+  const board: Board = boards.byId[selectedBoardId];
   const theme = useSelector(selectTheme);
 
-  const [open, setOpen] = React.useState(false);
-  const [openMenu, setOpenMenu] = React.useState(false);
-  const [archiveDialogOpen, setArchiveDialogOpen] = React.useState(false);
-  const [openTagsDialog, setOpenTagsDialog] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [confirmDeleteDialog, setConfirmDeleteDialog] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [archiveDialogOpen, setArchiveDialogOpen] = useState(false);
+  const [openTagsDialog, setOpenTagsDialog] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [confirmDeleteDialog, setConfirmDeleteDialog] = useState(false);
+  const [renameBoardDialog, setRenameBoardDialog] = useState(false);
 
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -146,6 +150,11 @@ export default function SideBar() {
   const handleOpenManageTagsDialog = () => {
     setOpenTagsDialog(true);
     setOpenMenu(false);
+  };
+
+  const handleRenameBoard = () => {
+    setOpenMenu(false);
+    setRenameBoardDialog(true);
   };
 
   const handleCloseTagsDialog = () => {
@@ -236,6 +245,12 @@ export default function SideBar() {
             View archived cards
           </MenuItem>
           <Divider />
+          <MenuItem onClick={handleRenameBoard}>
+            <ListItemIcon>
+              <EditOutlined />
+            </ListItemIcon>
+            Rename the board
+          </MenuItem>
           <MenuItem
             onClick={handleDeleteBoard}
             disabled={boards.allIds.length < 2}
@@ -262,6 +277,12 @@ export default function SideBar() {
         onConfirm={confirmDeleteBoard}
         message="Are you sure you would like to delete this board?"
         dialogTitle="Delete board"
+      />
+      <RenameBoardDialog
+        open={renameBoardDialog}
+        onCancel={() => setRenameBoardDialog(false)}
+        onConfirm={() => setRenameBoardDialog(false)}
+        boardName={board.title}
       />
     </div>
   );

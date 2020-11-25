@@ -62,6 +62,11 @@ const boardSlice = createSlice({
       delete state.byId[boardToRemove];
       state.allIds.splice(indexOfBoard, 1);
     },
+    renameBoard(state, action) {
+      const { title } = action.payload;
+      const board = state.byId[action.selectedBoard];
+      board.title = title;
+    },
     updateCard(state, action) {
       const board = state.byId[action.selectedBoard];
       const { title, description, cardId, cardTags, deadline } = action.payload;
@@ -147,6 +152,7 @@ export const {
   updateCard,
   updateColumn,
   deleteBoard,
+  renameBoard,
   archiveCard,
   flagCard,
   unflagCard,

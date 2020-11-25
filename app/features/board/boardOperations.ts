@@ -137,6 +137,12 @@ export const deleteTheTag = (board: Board, tagId: string) => {
       card.tags.splice(tagInCard, 1);
     }
   });
+  board.archive.forEach((entry) => {
+    if (entry.card.tags) {
+      const tagInCard = entry.card.tags.indexOf(tagId);
+      entry.card.tags.splice(tagInCard, 1);
+    }
+  });
 };
 
 export const updateTheTag = (

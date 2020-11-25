@@ -70,16 +70,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const mapTableContent = (archive) => {
-  return archive.map((entry) => {
-    const { card } = entry;
-    if (!card) console.log(entry);
-    return {
-      number: card.number,
-      title: card.title,
-      archivedOn: new Date(entry.archivedOn).toLocaleString(),
-      id: card.id,
-    };
-  });
+  return archive
+    .sort((left, right) => right.archivedOn - left.archivedOn)
+    .map((entry) => {
+      const { card } = entry;
+      return {
+        number: card.number,
+        title: card.title,
+        archivedOn: new Date(entry.archivedOn).toLocaleString(),
+        id: card.id,
+      };
+    });
 };
 
 export default function CardsArchiveDialog(

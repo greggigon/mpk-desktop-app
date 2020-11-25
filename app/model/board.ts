@@ -24,12 +24,18 @@ export interface Tags {
   allIds: Array<string>;
 }
 
+export interface ArchiveEntry {
+  cardId: string;
+  card: Card;
+  archivedOn: number;
+}
+
 export interface Board {
   title: string;
   id: string;
   columns: Array<Column>;
   cards: Array<Card>;
-  archive: Array<string>;
+  archive: Array<ArchiveEntry>;
   lastUpdated: number;
   tags: Tags;
   cardsCounter: number;

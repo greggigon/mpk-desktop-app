@@ -8,6 +8,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Chip from '@material-ui/core/Chip';
 
 import { useDispatch } from 'react-redux';
 import { addCard } from '../../features/board/boardSlice';
@@ -92,6 +93,18 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
     }
   };
 
+  const chipForTag = (value, getTagProps) => {
+    return value.map((option, index) => (
+      <Chip
+        key={option.id}
+        size="small"
+        label={option.name}
+        style={{ backgroundColor: option.color, marginRight: 5 }}
+        {...getTagProps({ index })}
+      />
+    ));
+  };
+
   if (columnId) {
     const theSwitch = (
       <Switch
@@ -153,6 +166,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
                     placeholder="Tags"
                   />
                 )}
+                renderTags={chipForTag}
               />
             </div>
           </DialogContent>

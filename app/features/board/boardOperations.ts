@@ -192,7 +192,8 @@ export const moveCardFromBoardToBoard = (
 ) => {
   removeCardWithIdFromColumn(fromBoard, cardId);
   const cardIndex = findIndexOfCardInBoardCards(fromBoard, cardId);
-  const theCard = fromBoard.cards.splice(cardIndex, 1)[0];
+  const theCard: Card = fromBoard.cards.splice(cardIndex, 1)[0];
+  theCard.tags = [];
   const toBoard: Board = boardsById[toBoardId];
   const firstColumn = toBoard.columns[0];
 

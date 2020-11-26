@@ -1,4 +1,9 @@
-import { Board, ColumnOptions, createTag } from '../../model/board';
+import {
+  ArchiveEntry,
+  Board,
+  ColumnOptions,
+  createTag,
+} from '../../model/board';
 import { Card, Task, createCard, createFlag } from '../../model/cards';
 import { extractTasks } from '../../utils/stringUtils';
 
@@ -193,4 +198,29 @@ export const moveCardFromBoardToBoard = (
 
   toBoard.cards.push(theCard);
   addCardToColumnAtTopOrBottom(firstColumn, theCard.id, addAtTheTop);
+};
+
+export const unarchiveCardsOnBoard = (cardIds: Array<string>, board: Board) => {
+  cardIds.forEach((cardId) => {
+    const index = board.archive.findIndex(
+      (entry: ArchiveEntry) => entry.cardId === cardId
+    );
+    const { card } = board.archive[index];
+    board.archive.splice(index, 1);
+    board.cards.push(card);
+    const lastColumn = board.columns[board.columns.length - 1];
+    addCardToColumnAtTopOrBottom(lastColumn, card.id, true);
+  });
+};
+
+export const deleteFromArchiveOnBoard = (
+  cardIds: Array<string>,
+  board: Board
+) => {
+  cardIds.forEach((cardId) => {
+    const index = board.archive.findIndex(
+      (entry: ArchiveEntry) => entry.cardId === cardId
+    );
+    board.archive.splice(index, 1);
+  });
 };

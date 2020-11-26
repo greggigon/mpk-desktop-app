@@ -13,6 +13,8 @@ import {
   updateTheTag,
   updateCardTask,
   moveCardFromBoardToBoard,
+  unarchiveCardsOnBoard,
+  deleteFromArchiveOnBoard,
 } from './boardOperations';
 
 const boardSlice = createSlice({
@@ -100,6 +102,16 @@ const boardSlice = createSlice({
       const cardId = action.payload;
       archiveTheCard(board, cardId);
     },
+    unarchiveCards(state, action) {
+      const board = state.byId[action.selectedBoard];
+      const cardIds = action.payload;
+      unarchiveCardsOnBoard(cardIds, board);
+    },
+    deleteFromArchive(state, action) {
+      const board = state.byId[action.selectedBoard];
+      const cardIds = action.payload;
+      deleteFromArchiveOnBoard(cardIds, board);
+    },
     flagCard(state, action) {
       const board = state.byId[action.selectedBoard];
       setCardFlag(board.cards, action.payload, true);
@@ -162,6 +174,8 @@ export const {
   updateCardsPastDeadline,
   updateCardsTask,
   moveCardToBoard,
+  unarchiveCards,
+  deleteFromArchive,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

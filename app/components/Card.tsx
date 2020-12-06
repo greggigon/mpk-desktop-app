@@ -139,7 +139,11 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
                     placement="bottom"
                     arrow
                   >
-                    <DescriptionIcon fontSize="small" />
+                    <DescriptionIcon
+                      fontSize="small"
+                      onClick={editCard}
+                      className={styles.hasDescriptionIcon}
+                    />
                   </Tooltip>
                 )}
                 {showDeadline && hasDeadline && (

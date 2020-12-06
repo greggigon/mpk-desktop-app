@@ -38,3 +38,7 @@
 .cardNumber {
   text-align: center;
 }
+
+.hasDescriptionIcon {
+  cursor: pointer;
+}

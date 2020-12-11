@@ -1,7 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import defaultBoard from './defaultBoard';
-import { APP_FILE_NAME, APP_SAVE_FOLDER_NAME, SAVE_FILE_NAME } from './shared';
+import {
+  APP_FILE_NAME,
+  APP_SAVE_FOLDER_NAME,
+  SAVE_FILE_NAME,
+  APP_SAVE_FOLDER_NAME_DEV,
+} from './shared';
 import migrate from './migrator';
 
 const checkFolderExistsAndCreateItIfNot = (thePath) => {
@@ -16,8 +21,14 @@ const checkSaveFileExistsAndCreateIfNot = (saveFile, defaultFileContent) => {
   }
 };
 
-const loadedData = (appDataPath: string) => {
-  const appSaveFolder = path.join(appDataPath, APP_SAVE_FOLDER_NAME);
+const loadedData = (appDataPath: string, isDevelopment = false) => {
+  const folderNameToUse = isDevelopment
+    ? APP_SAVE_FOLDER_NAME_DEV
+    : APP_SAVE_FOLDER_NAME;
+  if (isDevelopment) {
+    console.log('!!! DEVELOPMENT MODE !!! Using folder name', folderNameToUse);
+  }
+  const appSaveFolder = path.join(appDataPath, folderNameToUse);
   checkFolderExistsAndCreateItIfNot(appSaveFolder);
 
   const boardsFile = path.join(appSaveFolder, SAVE_FILE_NAME);

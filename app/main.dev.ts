@@ -80,7 +80,10 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    const configuration = { appDataFolder: app.getPath('appData') };
+    const configuration = {
+      appDataFolder: app.getPath('appData'),
+      isDevelopment: process.env.NODE_ENV === 'development',
+    };
     mainWindow.webContents.send('window-loaded-configuration', configuration);
 
     if (process.env.START_MINIMIZED) {

@@ -10,7 +10,11 @@ import './app.global.css';
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
 
 const initiateApplication = (configuration) => {
-  const loadedAppData = loader(configuration.appDataFolder);
+  const loadedAppData = loader(
+    configuration.appDataFolder,
+    configuration.isDevelopment
+  );
+
   const store = configuredStore(
     { boards: loadedAppData.boards, app: loadedAppData.app },
     configuration.appDataFolder

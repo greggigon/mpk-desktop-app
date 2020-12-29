@@ -17,7 +17,8 @@ const initiateApplication = (configuration) => {
 
   const store = configuredStore(
     { boards: loadedAppData.boards, app: loadedAppData.app },
-    configuration.appDataFolder
+    configuration.appDataFolder,
+    configuration.isDevelopment
   );
   const boardTitle =
     loadedAppData.boards.byId[loadedAppData.app.selectedBoard].title;

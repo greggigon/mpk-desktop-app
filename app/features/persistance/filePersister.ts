@@ -1,9 +1,17 @@
 import path from 'path';
 import fs from 'fs';
-import { APP_FILE_NAME, SAVE_FILE_NAME, APP_SAVE_FOLDER_NAME } from './shared';
+import {
+  APP_FILE_NAME,
+  SAVE_FILE_NAME,
+  APP_SAVE_FOLDER_NAME,
+  APP_SAVE_FOLDER_NAME_DEV,
+} from './shared';
 
-const createMiddleWare = (appDataPath) => {
-  const appSaveFolder = path.join(appDataPath, APP_SAVE_FOLDER_NAME);
+const createMiddleWare = (appDataPath, isDevelopment = false) => {
+  const folderNameToUse = isDevelopment
+    ? APP_SAVE_FOLDER_NAME_DEV
+    : APP_SAVE_FOLDER_NAME;
+  const appSaveFolder = path.join(appDataPath, folderNameToUse);
   const boardsFile = path.join(appSaveFolder, SAVE_FILE_NAME);
   const appFile = path.join(appSaveFolder, APP_FILE_NAME);
 

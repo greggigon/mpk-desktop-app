@@ -42,10 +42,11 @@ if (shouldIncludeLogger) {
 
 export const configuredStore = (
   initialState?: RootState,
-  appDataFolder: string
+  appDataFolder: string,
+  isDevelopment = false
 ) => {
   // Create Store
-  const persisterMiddleware = createPersister(appDataFolder);
+  const persisterMiddleware = createPersister(appDataFolder, isDevelopment);
   middleware.push(persisterMiddleware);
 
   const store = configureStore({

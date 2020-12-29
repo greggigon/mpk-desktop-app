@@ -32,7 +32,7 @@ The application is developed with:
 
 - [Greg Gigon](https://github.com/gregigu)
 
-## Contributinh
+## Contributing
 
 Please contribute your improvements and bug fixes via Issues and a standard Pull Request process on GitHub.
 

@@ -1,4 +1,4 @@
-My Personal Kanban 2.0 Copyright (C) 2020 Greg Gigon
+My Personal Kanban 2.0 Copyright (C) 2020 Grzegorz (Greg) Gigon
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

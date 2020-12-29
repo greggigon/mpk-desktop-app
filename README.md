@@ -1,7 +1,7 @@
 # My Personal Kanban 2.0
 
 This is a Standalone Desktop version of the My Personal Kanban, previously developed as a Browser App, with different set of technologies.
-More information can be found at [https://greggigon.com/my-personal-kanban-2-0/](https://greggigon.com/my-personal-kanban-2-0/).
+More information with list of features and binary releases can be found at [https://greggigon.com/my-personal-kanban-2-0/](https://greggigon.com/my-personal-kanban-2-0/).
 
 ## Starting Development
 

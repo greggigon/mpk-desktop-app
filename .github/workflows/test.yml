@@ -40,4 +40,4 @@ jobs:
             # yarn build-e2e
             # yarn test-e2e
 
-# I commented the above lines to shorten the build time in GitHub.
+# Need to re-enable once E2E tests are added

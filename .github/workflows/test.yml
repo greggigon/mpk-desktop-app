@@ -30,9 +30,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           run: |
+            yarn build
             yarn lint
             yarn test
-            yarn build
             # yarn package-ci
             # yarn lint
             # yarn tsc

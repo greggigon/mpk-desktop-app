@@ -25,11 +25,10 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: yarn test
-        with:
-          run: |
-            yarn lint
-            yarn test
-            yarn build
+        run: |
+          yarn lint
+          yarn test
+          yarn build
 
 # Issue in the action https://github.com/GabrielBB/xvfb-action/issues/14
 # Need to re-enable once E2E tests are added

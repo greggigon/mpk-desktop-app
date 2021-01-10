@@ -1,6 +1,6 @@
 name: Test
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   release:
@@ -30,8 +30,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           run: |
-            yarn lint
-            yarn test
+            yarn lint \
+            yarn test \
             yarn build
             # yarn package-ci
             # yarn lint

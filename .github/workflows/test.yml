@@ -27,6 +27,6 @@ jobs:
       - name: yarn test
         uses: GabrielBB/xvfb-action@v1.4
         with:
-          run: yarn lint && yarn test && yarn build
+          run: yarn github-build
 # Issue in the action https://github.com/GabrielBB/xvfb-action/issues/14
 # Need to re-enable once E2E tests are added

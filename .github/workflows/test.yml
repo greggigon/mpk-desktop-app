@@ -25,14 +25,10 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: yarn test
-        uses: GabrielBB/xvfb-action@v1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           run: |
-            xvfb-run --server-args="-screen 0, 1280x720x24" -a \
-            yarn lint \
-            yarn test \
+            yarn lint
+            yarn test
             yarn build
 
 # Issue in the action https://github.com/GabrielBB/xvfb-action/issues/14

@@ -25,14 +25,14 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: yarn test
-        uses: GabrielBB/xvfb-action@v1.2
+        uses: GabrielBB/xvfb-action@v1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           run: |
-            yarn build
             yarn lint
             yarn test
+            yarn build
             # yarn package-ci
             # yarn lint
             # yarn tsc

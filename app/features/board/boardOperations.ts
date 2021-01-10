@@ -195,6 +195,9 @@ export const moveCardFromBoardToBoard = (
   const theCard: Card = fromBoard.cards.splice(cardIndex, 1)[0];
   theCard.tags = [];
   const toBoard: Board = boardsById[toBoardId];
+  const newCardNumber = toBoard.cardsCounter + 1;
+  toBoard.cardsCounter = newCardNumber;
+  theCard.number = newCardNumber;
   const firstColumn = toBoard.columns[0];
 
   toBoard.cards.push(theCard);

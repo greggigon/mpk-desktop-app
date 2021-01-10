@@ -31,7 +31,6 @@ const board: Board = {
   archive: [],
   lastUpdated: Date.now(),
   tags: { byId: {}, allIds: new Array<string>() },
-  deadlines: {},
   cardsCounter: 9,
 };
 

@@ -30,14 +30,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           run: |
+            xvfb-run --server-args="-screen 0, 1280x720x24" -a \
             yarn lint \
             yarn test \
             yarn build
-            # yarn package-ci
-            # yarn lint
-            # yarn tsc
-            # yarn test
-            # yarn build-e2e
-            # yarn test-e2e
 
+# Issue in the action https://github.com/GabrielBB/xvfb-action/issues/14
 # Need to re-enable once E2E tests are added

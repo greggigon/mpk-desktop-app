@@ -48,3 +48,7 @@ npm-debug.log.*
 *.css.d.ts
 *.sass.d.ts
 *.scss.d.ts
+
+# lock files
+package-lock.json
+app/package-lock.json

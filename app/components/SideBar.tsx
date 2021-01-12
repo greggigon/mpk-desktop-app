@@ -199,7 +199,7 @@ export default function SideBar() {
               }}
               onClick={() => handleSwitchBoard(boardId)}
             >
-              {String.fromCharCode(65 + index)}
+              {boards.byId[boardId].title[0]}
             </Avatar>
           </ButtonBase>
         </Tooltip>

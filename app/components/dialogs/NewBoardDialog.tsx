@@ -72,7 +72,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
     } else {
       setBoardNameError(false);
     }
-    setBoardName(event.target.value);
+    setBoardName(event.target.value.trim());
   };
 
   return (

@@ -33,6 +33,15 @@ const selectIfTasksShouldShow = (state: RootState): boolean => {
   return showTasksOnCards;
 };
 
+const sortTagsAlphabeticaly = (
+  tags: Array<string>,
+  tagObjects: Record<string, Tag>
+) => {
+  return [...tags].sort((left, right) =>
+    tagObjects[left].name.localeCompare(tagObjects[right].name)
+  );
+};
+
 interface KanbanCardProps {
   card: Card;
   index: number;
@@ -59,6 +68,12 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
   const [deadlineTooltip, setDeadlineTooltip] = React.useState(
     'This card has a deadline'
   );
+  const [sortedTags, setSortedTags] = React.useState(
+    card.tags && card.tags.length !== 0
+      ? sortTagsAlphabeticaly(card.tags, tags)
+      : []
+  );
+
   const dispatch = useDispatch();
 
   const closeMenu = () => {
@@ -112,7 +127,10 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
         setDeadlineTooltip(tooltip);
       }
     }
-  }, [card, showDeadline, deadlineColor]);
+    if (card.tags && card.tags.length > 0) {
+      setSortedTags(sortTagsAlphabeticaly(card.tags, tags));
+    }
+  }, [card, tags, showDeadline, deadlineColor]);
 
   return (
     <div>
@@ -185,7 +203,7 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
             </div>
             {showTagsOnCards && hasTags && (
               <div className={styles.tagsContainer}>
-                {card.tags.map((tagId) => (
+                {sortedTags.map((tagId) => (
                   <Chip
                     key={tags[tagId].id}
                     size="small"

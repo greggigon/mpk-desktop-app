@@ -6,7 +6,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import clsx from 'clsx';
 
 import styles from './Column.css';
-import Card from './Card';
+import Card from './DraggableCard';
 import EditColumnDialog from './dialogs/EditColumnDialog';
 import { Column as ColumnType, Tag } from '../model/board';
 import { Card as CardType } from '../model/cards';

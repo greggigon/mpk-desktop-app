@@ -54,7 +54,10 @@ export default function Board() {
     setSelectedCardAndAction,
   ] = useState<SelectedCardAndAction | null>(null);
 
-  const handleOpen = () => {
+  const handleOpen = (event) => {
+    if (event.type === 'focus') {
+      return;
+    }
     setOpen(true);
   };
 

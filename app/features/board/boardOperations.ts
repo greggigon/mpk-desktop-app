@@ -168,7 +168,8 @@ export const updateCardTask = (
 ) => {
   const tasks: Array<Task> = extractTasks(card.description);
   const taskContent = tasks[taskIndex].content;
-  const regexReplacement = new RegExp(`-.?\\[(.*)\\].*${taskContent}`, 'g');
+  const regex = `[-|+|*]\\s?\\[.*\\]\\s?${taskContent}`;
+  const regexReplacement = new RegExp(regex, 'g');
 
   if (taskDone) {
     card.description = card.description.replace(

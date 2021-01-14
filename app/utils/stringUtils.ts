@@ -4,7 +4,8 @@ export const isBlank = (str: string) => {
   return !str || /^\s*$/.test(str);
 };
 
-const checkboxRegex = /-.?\[(.*)\](.*)/gim;
+// const checkboxRegex = /-.?\[(.*)\](.*)/gim;
+const checkboxRegex = /^\s?[-|+|*]\s?\[(.*)\](?:\s)?(.*)/gim;
 
 const matchToTask = (match, index): Task => {
   const done = match[1].trim().toLowerCase() === 'x';

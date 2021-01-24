@@ -5,6 +5,7 @@ export interface Tag {
   name: string;
   color: string;
   id: string;
+  textColor?: string;
 }
 
 export interface ColumnOptions {
@@ -41,8 +42,12 @@ export interface Board {
   cardsCounter: number;
 }
 
-export const createTag = (name: string, color: string): Tag => {
-  return { name, color, id: uuidv4() };
+export const createTag = (
+  name: string,
+  color: string,
+  textColor: string
+): Tag => {
+  return { name, color, id: uuidv4(), textColor };
 };
 
 export const createNewBoard = (

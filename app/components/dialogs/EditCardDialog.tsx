@@ -11,11 +11,11 @@ import Switch from '@material-ui/core/Switch';
 import { useDispatch } from 'react-redux';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFns from '@date-io/date-fns';
-import Chip from '@material-ui/core/Chip';
 
 import { updateCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 import { Tag } from '../../model/board';
+import TagComponent from '../Tag';
 import { Card } from '../../model/cards';
 import ExpandableDialog from './ExpandableDialog';
 import styles from './CardDialogs.css';
@@ -105,13 +105,14 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
     }
   };
 
-  const chipForTag = (value, getTagProps) => {
+  const tagComponentRender = (value, getTagProps) => {
     return value.map((option, index) => (
-      <Chip
+      <TagComponent
         key={option.id}
         size="small"
         label={option.name}
-        style={{ backgroundColor: option.color, marginRight: 5 }}
+        backgroundColor={option.color}
+        textColor={option.textColor}
         {...getTagProps({ index })}
       />
     ));
@@ -168,7 +169,7 @@ export default function EditCardDialog(props: EditCardDialogProperties) {
                   placeholder="Tags"
                 />
               )}
-              renderTags={chipForTag}
+              renderTags={tagComponentRender}
             />
           </div>
           <div className={styles.deadlineContainer}>

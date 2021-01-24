@@ -8,12 +8,12 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Chip from '@material-ui/core/Chip';
 
 import { useDispatch } from 'react-redux';
 import { addCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 import { Tag } from '../../model/board';
+import TagComponent from '../Tag';
 import ExpandableDialog from './ExpandableDialog';
 import styles from './CardDialogs.css';
 
@@ -93,13 +93,14 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
     }
   };
 
-  const chipForTag = (value, getTagProps) => {
+  const tagComponentRender = (value, getTagProps) => {
     return value.map((option, index) => (
-      <Chip
+      <TagComponent
         key={option.id}
         size="small"
         label={option.name}
-        style={{ backgroundColor: option.color, marginRight: 5 }}
+        backgroundColor={option.color}
+        textColor={option.textColor}
         {...getTagProps({ index })}
       />
     ));
@@ -166,7 +167,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
                     placeholder="Tags"
                   />
                 )}
-                renderTags={chipForTag}
+                renderTags={tagComponentRender}
               />
             </div>
           </DialogContent>

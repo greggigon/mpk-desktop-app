@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { MoreVert, Flag, Alarm } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
-import { Menu, MenuItem, Chip, Tooltip } from '@material-ui/core';
+import { Menu, MenuItem, Tooltip } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 
 import styles from './Card.css';
@@ -17,6 +17,7 @@ import {
 } from '../features/board/boardSlice';
 import { Card } from '../model/cards';
 import { Tag } from '../model/board';
+import TagComponent from './Tag';
 import { SelectedCardAndAction } from './viewModels';
 import { isBlank } from '../utils/stringUtils';
 
@@ -195,12 +196,12 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
       {showTagsOnCards && hasTags && (
         <div className={styles.tagsContainer}>
           {sortedTags.map((tagId) => (
-            <Chip
-              key={tags[tagId].id}
-              size="small"
+            <TagComponent
               label={tags[tagId].name}
+              backgroundColor={tags[tagId].color}
+              textColor={tags[tagId].textColor}
+              key={tags[tagId].id}
               className={styles.tagOnCard}
-              style={{ backgroundColor: tags[tagId].color }}
             />
           ))}
         </div>

@@ -11,7 +11,6 @@ import Switch from '@material-ui/core/Switch';
 import { useDispatch } from 'react-redux';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFns from '@date-io/date-fns';
-import Chip from '@material-ui/core/Chip';
 
 import { updateCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';

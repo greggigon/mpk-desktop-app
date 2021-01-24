@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { MoreVert, Flag, Alarm } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
-import { Menu, MenuItem, Chip, Tooltip } from '@material-ui/core';
+import { Menu, MenuItem, Tooltip } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 
 import styles from './Card.css';

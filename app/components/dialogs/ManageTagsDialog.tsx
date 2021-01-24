@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
-import Chip from '@material-ui/core/Chip';
 import FormGroup from '@material-ui/core/FormGroup';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Button, DialogContent, Divider } from '@material-ui/core';
@@ -59,9 +58,6 @@ interface ManageTagsDialogProps {
 
 const getDefaultTextColor = (theme) =>
   theme.palette.text.primary === '#fff' ? '#ffffff' : '#000000';
-
-const getTagTextColor = (tag: Tag, defaultColor: string) =>
-  tag.textColor || defaultColor;
 
 export default function ManageTagsDialog(props: ManageTagsDialogProps) {
   const defaultTagTextColor = getDefaultTextColor(useTheme());

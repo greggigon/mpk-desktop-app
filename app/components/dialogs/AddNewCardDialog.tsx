@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { addCard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';
 import { Tag } from '../../model/board';
+import TagComponent from '../Tag';
 import ExpandableDialog from './ExpandableDialog';
 import styles from './CardDialogs.css';
 
@@ -93,13 +94,14 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
     }
   };
 
-  const chipForTag = (value, getTagProps) => {
+  const tagComponentRender = (value, getTagProps) => {
     return value.map((option, index) => (
-      <Chip
+      <TagComponent
         key={option.id}
         size="small"
         label={option.name}
-        style={{ backgroundColor: option.color, marginRight: 5 }}
+        backgroundColor={option.color}
+        textColor={option.textColor}
         {...getTagProps({ index })}
       />
     ));
@@ -166,7 +168,7 @@ export default function AddNewCardDialog(props: AddNewCardDialogProps) {
                     placeholder="Tags"
                   />
                 )}
-                renderTags={chipForTag}
+                renderTags={tagComponentRender}
               />
             </div>
           </DialogContent>

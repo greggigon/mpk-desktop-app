@@ -5,12 +5,12 @@ import Adapter from 'enzyme-adapter-react-16';
 import { Provider } from 'react-redux';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { Chip } from '@material-ui/core';
 import * as boardSlice from '../../app/features/board/boardSlice';
 import * as appSlice from '../../app/features/app/appSlice';
 import Card from '../../app/components/Card';
 import { createCard } from '../../app/model/cards';
 import { Tag } from '../../app/model/board';
+import TagComponent from '../../app/components/Tag';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -49,15 +49,15 @@ function setup(
   return {
     store,
     component,
-    tagChips: component.find(Chip),
+    tagsOnCard: component.find(TagComponent),
   };
 }
 
 describe('Card component', () => {
   it('should display tags on card in the alphabetical order', () => {
-    const { tagChips } = setup();
-    expect(tagChips).toHaveLength(2);
-    expect(tagChips.at(0).prop('label')).toBe('A');
-    expect(tagChips.at(1).prop('label')).toBe('Z');
+    const { tagsOnCard } = setup();
+    expect(tagsOnCard).toHaveLength(2);
+    expect(tagsOnCard.at(0).prop('label')).toBe('A');
+    expect(tagsOnCard.at(1).prop('label')).toBe('Z');
   });
 });

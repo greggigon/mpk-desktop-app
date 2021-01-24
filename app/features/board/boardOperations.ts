@@ -126,8 +126,13 @@ export const setCardFlag = (cards, cardId, flag: boolean) => {
   card.lastModified = Date.now();
 };
 
-export const addNewTag = (board: Board, name: string, color: string) => {
-  const newTag = createTag(name, color);
+export const addNewTag = (
+  board: Board,
+  name: string,
+  color: string,
+  textColor: string
+) => {
+  const newTag = createTag(name, color, textColor);
   board.tags.byId[newTag.id] = newTag;
   board.tags.allIds.push(newTag.id);
 };
@@ -154,11 +159,13 @@ export const updateTheTag = (
   board: Board,
   id: string,
   name: string,
-  color: string
+  color: string,
+  textColor: string
 ) => {
   const theTag = board.tags.byId[id];
   theTag.name = name;
   theTag.color = color;
+  theTag.textColor = textColor;
 };
 
 export const updateCardTask = (

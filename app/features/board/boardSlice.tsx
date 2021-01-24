@@ -122,8 +122,8 @@ const boardSlice = createSlice({
     },
     addTag(state, action) {
       const board = state.byId[action.selectedBoard];
-      const { name, color } = action.payload;
-      addNewTag(board, name, color);
+      const { name, color, textColor } = action.payload;
+      addNewTag(board, name, color, textColor);
     },
     deleteTag(state, action) {
       const board = state.byId[action.selectedBoard];
@@ -131,8 +131,8 @@ const boardSlice = createSlice({
     },
     updateTag(state, action) {
       const board = state.byId[action.selectedBoard];
-      const { name, color, id } = action.payload;
-      updateTheTag(board, id, name, color);
+      const { name, color, id, textColor } = action.payload;
+      updateTheTag(board, id, name, color, textColor);
     },
     updateCardsPastDeadline(state, action) {
       const board = state.byId[action.selectedBoard];

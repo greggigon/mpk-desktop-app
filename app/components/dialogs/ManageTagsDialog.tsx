@@ -9,7 +9,7 @@ import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import FormGroup from '@material-ui/core/FormGroup';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Button, DialogContent, Divider } from '@material-ui/core';
 import { purple } from '@material-ui/core/colors';
 import { useDispatch } from 'react-redux';
@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { Board, Tag } from '../../model/board';
 import { addTag, deleteTag, updateTag } from '../../features/board/boardSlice';
 import ConfirmDialog from './ConfirmDialog';
+import TagComponent from '../Tag';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,9 +57,17 @@ interface ManageTagsDialogProps {
   board: Board;
 }
 
+const getDefaultTextColor = (theme) =>
+  theme.palette.text.primary === '#fff' ? '#ffffff' : '#000000';
+
+const getTagTextColor = (tag: Tag, defaultColor: string) =>
+  tag.textColor || defaultColor;
+
 export default function ManageTagsDialog(props: ManageTagsDialogProps) {
+  const defaultTagTextColor = getDefaultTextColor(useTheme());
   const { close, board } = props;
   const [colorSelector, setColorSelector] = React.useState(purple[500]);
+  const [textColor, setTextColor] = React.useState(defaultTagTextColor);
   const [tagText, setTagText] = React.useState('');
   const [tagTextPreview, setTagTextPreview] = React.useState('New tag');
   const [editedTag, setEditedTag] = React.useState();
@@ -75,6 +84,10 @@ export default function ManageTagsDialog(props: ManageTagsDialogProps) {
     setColorSelector(event.target.value);
   };
 
+  const textColorSelectionChanged = (event) => {
+    setTextColor(event.target.value);
+  };
+
   const handleTagTextChanged = (event) => {
     const newValue = event.target.value;
     setTagText(newValue);
@@ -84,7 +97,7 @@ export default function ManageTagsDialog(props: ManageTagsDialogProps) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!editedTag) {
-      dispatch(addTag({ name: tagText, color: colorSelector }));
+      dispatch(addTag({ name: tagText, color: colorSelector, textColor }));
       setTagText('');
     } else {
       dispatch(
@@ -92,6 +105,7 @@ export default function ManageTagsDialog(props: ManageTagsDialogProps) {
           id: editedTag.id,
           name: tagText,
           color: colorSelector,
+          textColor,
         })
       );
     }
@@ -169,16 +183,26 @@ export default function ManageTagsDialog(props: ManageTagsDialogProps) {
                 value={colorSelector}
               />
             </div>
+            <div className={classes.formElements}>
+              <TextField
+                type="color"
+                label="Text color"
+                variant="outlined"
+                helperText="Select tag text color"
+                onChange={textColorSelectionChanged}
+                value={textColor}
+              />
+            </div>
             <div className={classes.tagPreview}>
               <div>
                 <Typography variant="caption">Tag preview</Typography>
               </div>
               <div>
-                <Chip
-                  className={classes.tagColor}
-                  size="small"
+                <TagComponent
                   label={tagTextPreview}
-                  style={{ backgroundColor: colorSelector }}
+                  backgroundColor={colorSelector}
+                  textColor={textColor}
+                  className={classes.tagColor}
                 />
               </div>
             </div>
@@ -204,14 +228,14 @@ export default function ManageTagsDialog(props: ManageTagsDialogProps) {
         </div>
         <div className={classes.formPadding}>
           {Object.values(board.tags.byId).map((tag: Tag) => (
-            <Chip
-              size="small"
+            <TagComponent
               label={tag.name}
-              style={{ backgroundColor: tag.color }}
-              key={tag.id}
-              className={classes.currentTag}
+              backgroundColor={tag.color}
+              textColor={tag.textColor}
               onDelete={() => handleDeleteTag(tag.id)}
               onClick={() => handleTagClicked(tag)}
+              key={tag.id}
+              className={classes.currentTag}
             />
           ))}
         </div>

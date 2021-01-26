@@ -173,7 +173,7 @@ const KanbanCard: React.FunctionComponent<KanbanCardProps> = (
             open={open}
             onClose={closeMenu}
           >
-            <MenuItem onClick={editCard}>Open</MenuItem>
+            <MenuItem onClick={editCard}>Edit</MenuItem>
             {isFlagged ? (
               <MenuItem onClick={handleUnflagIt}>Unflag it</MenuItem>
             ) : (

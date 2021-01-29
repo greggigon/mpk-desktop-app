@@ -53,8 +53,14 @@ const boardSlice = createSlice({
       removeCardFromBoard(board, cardId);
     },
     createBoard(state, action) {
-      const { title, numberOfColumns } = action.payload;
+      const { title, numberOfColumns, selectedBoardId } = action.payload;
       const newBoard = createNewBoard(title, numberOfColumns);
+      if (selectedBoardId !== '') {
+        const board: Board = state.byId[selectedBoardId];
+        board.columns.forEach((column, index) => {
+          newBoard.columns[index].title = column.title;
+        });
+      }
       state.allIds.push(newBoard.id);
       state.byId[newBoard.id] = newBoard;
     },

@@ -68,12 +68,9 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
 
   const addBoard = () => {
     if (!isBlank(boardName)) {
-      if (selectedBoardId !== '') {
-        const selectedBoard: Board = boards.byId[selectedBoardId];
-        dispatch(createBoard({ title: selectedBoard.title, numberOfColumns }));
-      } else {
-        dispatch(createBoard({ title: boardName, numberOfColumns }));
-      }
+      dispatch(
+        createBoard({ title: boardName, selectedBoardId, numberOfColumns })
+      );
       handleClose();
     } else {
       setBoardNameError(true);
@@ -142,7 +139,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
         <div>
           <FormControl variant="filled" className={classes.formControl}>
             <InputLabel id="demo-simple-select-filled-label">
-              Create from existing boards
+              Number of columns
             </InputLabel>
             <Select
               labelId="demo-simple-select-filled-label"
@@ -169,7 +166,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
             <Select
               fullWidth
               labelId="select-board"
-              label="Create from exisiting board"
+              label="Create from existing board"
               value={selectedBoardId}
               onChange={handleBoardSelected}
             >

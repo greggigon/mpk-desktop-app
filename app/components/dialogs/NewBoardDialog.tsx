@@ -15,8 +15,11 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem } from '@material-ui/core';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { Board } from '../../model/board';
 import { createBoard } from '../../features/board/boardSlice';
+
 import { isBlank } from '../../utils/stringUtils';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,9 +44,15 @@ interface NewBoardDialogProps {
   close: () => void;
 }
 
+const getAllBoards = (state: RootState) => {
+  const { boards } = state;
+  return boards;
+};
+
 export default function NewBoardDialog(props: NewBoardDialogProps) {
   const { close } = props;
-
+  const boards = useSelector(getAllBoards);
+  const [selectedBoardId, setSelectedBoardId] = React.useState('');
   const [boardName, setBoardName] = React.useState('');
   const [dialogOpen, setDialogOpen] = React.useState(true);
   const [numberOfColumns, setNumberOfColumns] = React.useState(3);
@@ -59,7 +68,12 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
 
   const addBoard = () => {
     if (!isBlank(boardName)) {
-      dispatch(createBoard({ title: boardName, numberOfColumns }));
+      if (selectedBoardId !== '') {
+        const selectedBoard: Board = boards.byId[selectedBoardId];
+        dispatch(createBoard({ title: selectedBoard.title, numberOfColumns }));
+      } else {
+        dispatch(createBoard({ title: boardName, numberOfColumns }));
+      }
       handleClose();
     } else {
       setBoardNameError(true);
@@ -73,6 +87,17 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
       setBoardNameError(false);
     }
     setBoardName(event.target.value.trim());
+  };
+
+  const handleBoardSelected = (event) => {
+    const boardId = event.target.value;
+    if (boardId !== '') {
+      const selectedBoard: Board = boards.byId[boardId];
+      setNumberOfColumns(selectedBoard.columns.length);
+      setSelectedBoardId(boardId);
+    } else {
+      setSelectedBoardId('');
+    }
   };
 
   return (
@@ -117,7 +142,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
         <div>
           <FormControl variant="filled" className={classes.formControl}>
             <InputLabel id="demo-simple-select-filled-label">
-              Number of columns
+              Create from existing boards
             </InputLabel>
             <Select
               labelId="demo-simple-select-filled-label"
@@ -133,6 +158,27 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
               <MenuItem value={6}>6</MenuItem>
               <MenuItem value={7}>7</MenuItem>
               <MenuItem value={8}>8</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <div className={classes.formControl}>
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel id="demo-simple-select-filled-label">
+              Create from old board
+            </InputLabel>
+            <Select
+              fullWidth
+              labelId="select-board"
+              label="Create from exisiting board"
+              value={selectedBoardId}
+              onChange={handleBoardSelected}
+            >
+              <MenuItem value="">New board</MenuItem>
+              {boards.allIds.map((boardId) => (
+                <MenuItem value={boardId} key={boardId}>
+                  {boards.byId[boardId].title}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </div>

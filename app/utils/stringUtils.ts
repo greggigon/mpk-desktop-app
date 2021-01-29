@@ -24,4 +24,11 @@ export const extractTasks = (description: string): Array<Task> => {
   return tasks;
 };
 
+export const escapeRegExp = (content: string): string => {
+  if (!content) {
+    return content;
+  }
+  return content.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
 export default { isBlank };

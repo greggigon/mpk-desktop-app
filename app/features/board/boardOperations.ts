@@ -5,7 +5,7 @@ import {
   createTag,
 } from '../../model/board';
 import { Card, Task, createCard, createFlag } from '../../model/cards';
-import { extractTasks } from '../../utils/stringUtils';
+import { extractTasks, escapeRegExp } from '../../utils/stringUtils';
 
 const removeCardWithIdFromColumn = (board, cardId) => {
   board.columns.forEach((column) => {
@@ -168,7 +168,7 @@ export const updateCardTask = (
 ) => {
   const tasks: Array<Task> = extractTasks(card.description);
   const taskContent = tasks[taskIndex].content;
-  const regex = `[-|+|*]\\s?\\[.*\\]\\s?${taskContent}`;
+  const regex = `[-|+|*]\\s?\\[.*\\]\\s?${escapeRegExp(taskContent)}`;
   const regexReplacement = new RegExp(regex, 'g');
 
   if (taskDone) {

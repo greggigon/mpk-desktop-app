@@ -16,10 +16,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem } from '@material-ui/core';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { Board } from '../../model/board';
 import { createBoard } from '../../features/board/boardSlice';
-
 import { isBlank } from '../../utils/stringUtils';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,16 +40,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 interface NewBoardDialogProps {
   close: () => void;
+  boards: Array<Board>;
 }
 
-const getAllBoards = (state: RootState) => {
-  const { boards } = state;
-  return boards;
-};
-
 export default function NewBoardDialog(props: NewBoardDialogProps) {
-  const { close } = props;
-  const boards = useSelector(getAllBoards);
+  const { close, boards } = props;
   const [selectedBoardId, setSelectedBoardId] = React.useState('');
   const [boardName, setBoardName] = React.useState('');
   const [dialogOpen, setDialogOpen] = React.useState(true);
@@ -148,6 +141,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
                 setNumberOfColumns(event.target.value);
               }}
               value={numberOfColumns}
+              disabled={selectedBoardId !== ''}
             >
               <MenuItem value={3}>3</MenuItem>
               <MenuItem value={4}>4</MenuItem>
@@ -161,7 +155,7 @@ export default function NewBoardDialog(props: NewBoardDialogProps) {
         <div className={classes.formControl}>
           <FormControl variant="outlined" fullWidth>
             <InputLabel id="demo-simple-select-filled-label">
-              Create from old board
+              Create from existing board
             </InputLabel>
             <Select
               fullWidth

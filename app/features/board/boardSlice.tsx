@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createNewBoard } from '../../model/board';
+import { Board, createNewBoard } from '../../model/board';
 import {
   moveCardFromColumnToColumn,
   addCardToBoard,
@@ -53,8 +53,18 @@ const boardSlice = createSlice({
       removeCardFromBoard(board, cardId);
     },
     createBoard(state, action) {
-      const { title, numberOfColumns } = action.payload;
-      const newBoard = createNewBoard(title, numberOfColumns);
+      const { title, numberOfColumns, selectedBoardId } = action.payload;
+      let newBoard: Board;
+
+      if (selectedBoardId !== '') {
+        const board = state.byId[selectedBoardId];
+        newBoard = createNewBoard(title, board.columns.length);
+        board.columns.forEach((column, index) => {
+          newBoard.columns[index].title = column.title;
+        });
+      } else {
+        newBoard = createNewBoard(title, numberOfColumns);
+      }
       state.allIds.push(newBoard.id);
       state.byId[newBoard.id] = newBoard;
     },

@@ -262,7 +262,7 @@ export default function SideBar() {
           </MenuItem>
         </Menu>
       </Box>
-      {open && <NewBoardDialog close={handleClose} />}
+      {open && <NewBoardDialog close={handleClose} boards={boards} />}
       {openTagsDialog && (
         <ManageTagsDialog close={handleCloseTagsDialog} board={board} />
       )}

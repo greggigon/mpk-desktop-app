@@ -179,89 +179,92 @@ export default function SideBar() {
     theme === 'dark' ? colorForDarkTheme : colorForLightTheme;
   return (
     <div className={styles.container}>
-      {boards.allIds.map((boardId, index) => (
-        <Tooltip
-          arrow
-          title={boards.byId[boardId].title}
-          placement="right"
-          key={boardId}
-          className={clsx(
-            classes.boardButton,
-            isSelectedBoard(boardId, selectedBoardId) &&
-              classes.selectedBoardButton
-          )}
-        >
-          <ButtonBase>
-            <Avatar
-              variant="rounded"
-              style={{
-                backgroundColor: colorForBoardButton[100 + 100 * index],
-              }}
-              onClick={() => handleSwitchBoard(boardId)}
+      <div className={styles.topSidebard}>
+        {boards.allIds.map((boardId, index) => (
+          <Tooltip
+            arrow
+            title={boards.byId[boardId].title}
+            placement="right"
+            key={boardId}
+            className={clsx(
+              classes.boardButton,
+              isSelectedBoard(boardId, selectedBoardId) &&
+                classes.selectedBoardButton
+            )}
+          >
+            <ButtonBase>
+              <Avatar
+                variant="rounded"
+                style={{
+                  backgroundColor: colorForBoardButton[100 + 100 * index],
+                }}
+                onClick={() => handleSwitchBoard(boardId)}
+              >
+                {boards.byId[boardId].title[0]}
+              </Avatar>
+            </ButtonBase>
+          </Tooltip>
+        ))}
+        <Box className={styles.addBoard}>
+          <Tooltip title="Create new Board" placement="right">
+            <IconButton
+              aria-label="add"
+              onClick={() => setOpen(true)}
+              disabled={disableAddBoardButton()}
             >
-              {boards.byId[boardId].title[0]}
-            </Avatar>
-          </ButtonBase>
-        </Tooltip>
-      ))}
-      <Box className={styles.addBoard}>
-        <Tooltip title="Create new Board" placement="right">
-          <IconButton
-            aria-label="add"
-            onClick={() => setOpen(true)}
-            disabled={disableAddBoardButton()}
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </div>
+      <div className={styles.bottomSidebar}>
+        <Box>
+          <SubtaskSwitch />
+          <TagsSwitch />
+          <ThemeSwitch />
+          <Tooltip title="Board actions" placement="right" arrow>
+            <IconButton onClick={handleOpenMenu}>
+              <MoreVert />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            id="long-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={openMenu}
+            onClose={handleCloseMenu}
           >
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-
-      <Box className={styles.boardMenu}>
-        <SubtaskSwitch />
-        <TagsSwitch />
-        <ThemeSwitch />
-        <Tooltip title="Board actions" placement="right" arrow>
-          <IconButton onClick={handleOpenMenu}>
-            <MoreVert />
-          </IconButton>
-        </Tooltip>
-        <Menu
-          id="long-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={openMenu}
-          onClose={handleCloseMenu}
-        >
-          <MenuItem onClick={handleOpenManageTagsDialog}>
-            <ListItemIcon>
-              <LocalOfferOutlined />
-            </ListItemIcon>
-            Manage tags
-          </MenuItem>
-          <MenuItem onClick={handleOpenArchivesDialog}>
-            <ListItemIcon>
-              <ArchiveOutlined />
-            </ListItemIcon>
-            View archived cards
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleRenameBoard}>
-            <ListItemIcon>
-              <EditOutlined />
-            </ListItemIcon>
-            Rename the board
-          </MenuItem>
-          <MenuItem
-            onClick={handleDeleteBoard}
-            disabled={boards.allIds.length < 2}
-          >
-            <ListItemIcon>
-              <DeleteOutline />
-            </ListItemIcon>
-            Delete current board
-          </MenuItem>
-        </Menu>
-      </Box>
+            <MenuItem onClick={handleOpenManageTagsDialog}>
+              <ListItemIcon>
+                <LocalOfferOutlined />
+              </ListItemIcon>
+              Manage tags
+            </MenuItem>
+            <MenuItem onClick={handleOpenArchivesDialog}>
+              <ListItemIcon>
+                <ArchiveOutlined />
+              </ListItemIcon>
+              View archived cards
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleRenameBoard}>
+              <ListItemIcon>
+                <EditOutlined />
+              </ListItemIcon>
+              Rename the board
+            </MenuItem>
+            <MenuItem
+              onClick={handleDeleteBoard}
+              disabled={boards.allIds.length < 2}
+            >
+              <ListItemIcon>
+                <DeleteOutline />
+              </ListItemIcon>
+              Delete current board
+            </MenuItem>
+          </Menu>
+        </Box>
+      </div>
       {open && <NewBoardDialog close={handleClose} boards={boards} />}
       {openTagsDialog && (
         <ManageTagsDialog close={handleCloseTagsDialog} board={board} />

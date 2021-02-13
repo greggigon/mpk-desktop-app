@@ -1,4 +1,12 @@
+import { Filter } from '@material-ui/icons';
 import { createSlice } from '@reduxjs/toolkit';
+import { Tag } from '../../model/board';
+
+export interface Filter {
+  filterOrSearch: boolean;
+  tags: Array<Tag>;
+  search: string;
+}
 
 const searchAndFilterSlice = createSlice({
   name: 'searchAndFilter',

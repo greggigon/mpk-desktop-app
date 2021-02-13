@@ -8,9 +8,15 @@ export interface Filter {
   search: string;
 }
 
+export const cleanFilter: Filter = {
+  filterOrSearch: false,
+  tags: [],
+  search: '',
+};
+
 const searchAndFilterSlice = createSlice({
   name: 'searchAndFilter',
-  initialState: { filterOrSearch: false, tags: [], search: '' },
+  initialState: cleanFilter,
   reducers: {
     filterOnTags(state, action) {
       const { tags } = action.payload;

@@ -24,6 +24,7 @@ import colorForLightTheme from '@material-ui/core/colors/green';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteBoard } from '../features/board/boardSlice';
 import { switchToBoard } from '../features/app/appSlice';
+import { clearSearchAndFilter } from '../features/searchAndFilter/search';
 import styles from './SideBar.css';
 import CardsArchiveDialog from './dialogs/CardsArchiveDialog';
 import ThemeSwitch from './ThemeSwitch';
@@ -103,6 +104,7 @@ export default function SideBar() {
 
   const handleSwitchBoard = (boardId) => {
     dispatch(switchToBoard(boardId));
+    dispatch(clearSearchAndFilter({}));
   };
 
   const isSelectedBoard = (boardId, theOtherId) => {
@@ -172,7 +174,7 @@ export default function SideBar() {
     } else {
       nextBoardId = getBoardDown(boards, selectedBoardId);
     }
-    if (nextBoardId) dispatch(switchToBoard(nextBoardId));
+    if (nextBoardId) handleSwitchBoard(nextBoardId);
   });
 
   const colorForBoardButton =

@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
 import {
   Popover,
   Typography,
@@ -18,6 +17,7 @@ import { Tags, Tag, Board } from '../model/board';
 import {
   filterOnTags,
   searchForText,
+  clearSearchAndFilter,
 } from '../features/searchAndFilter/search';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,8 +56,15 @@ const selectFilter = (state: RootState) => {
   return searchAndFilter;
 };
 
-const addKeyboardShortcutHandling = (handler) => {
+const addSearchOpenKeyboardShortcut = (handler) => {
   mousetrap.bind(['command+g', 'ctrl+g'], () => {
+    handler();
+    return false;
+  });
+};
+
+const addClearFilterKeyboardShorcut = (handler) => {
+  mousetrap.bind(['command+shift+g', 'ctrl+shift+g'], () => {
     handler();
     return false;
   });
@@ -75,11 +82,23 @@ export default function SearchBox() {
   const [searchText, setSearchText] = useState(search);
   const [submited, setSubmited] = useState(true);
 
+  const clearSeachText = () => {
+    setSearchText('');
+    dispatch(searchForText({ search: '' }));
+    setSubmited(true);
+  };
+
   const toggleSearch = () => {
     setSearchPopoverOpen(!searchPopoverOpen);
   };
 
-  addKeyboardShortcutHandling(toggleSearch);
+  const clearAllFilters = () => {
+    clearSeachText();
+    dispatch(clearSearchAndFilter({}));
+  };
+
+  addSearchOpenKeyboardShortcut(toggleSearch);
+  addClearFilterKeyboardShorcut(clearAllFilters);
 
   const tagSelectedForFiltering = (_, value) => {
     dispatch(filterOnTags({ tags: value }));
@@ -101,12 +120,6 @@ export default function SearchBox() {
     if (!submited) {
       setSearchText(search);
     }
-  };
-
-  const clearSeachText = () => {
-    setSearchText('');
-    dispatch(searchForText({ search: '' }));
-    setSubmited(true);
   };
 
   const tagComponentRender = (value, getTagProps) => {

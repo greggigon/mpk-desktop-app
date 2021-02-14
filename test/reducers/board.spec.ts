@@ -81,6 +81,7 @@ describe('Board reducer', () => {
     it('should have the same number of columns as the existing board', () => {
       expect(createdBoard.columns.length).toBe(numberOfColumns);
     });
+
     it('should have the same columns as the existing board', () => {
       existingBoard.columns.forEach((column, index) => {
         expect(column.title).toEqual(createdBoard.columns[index].title);

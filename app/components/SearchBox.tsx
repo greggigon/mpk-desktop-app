@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import {
   Popover,
   Typography,
   TextField,
   InputAdornment,
   IconButton,
+  Tooltip,
 } from '@material-ui/core';
 import { Search, SubdirectoryArrowLeft, Clear } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -18,32 +18,9 @@ import {
   filterOnTags,
   searchForText,
   clearSearchAndFilter,
+  Filter,
 } from '../features/searchAndFilter/search';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      marginLeft: 10,
-    },
-    input: {
-      // marginLeft: theme.spacing(1),
-      // flex: 1,
-    },
-    searchPopOver: {
-      padding: 20,
-      width: 700,
-    },
-    searchInput: {
-      width: '100%',
-    },
-    searchSections: {
-      margin: 20,
-    },
-    tags: {
-      marginRight: 5,
-    },
-  })
-);
+import classes from './SearchBox.css';
 
 const selectTags = (state: RootState): Tags => {
   const { selectedBoard } = state.app;
@@ -72,11 +49,10 @@ const addClearFilterKeyboardShorcut = (handler) => {
 
 export default function SearchBox() {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const searchRef = useRef();
   const [searchPopoverOpen, setSearchPopoverOpen] = useState(false);
   const tags = useSelector(selectTags);
-  const searchAndFilter = useSelector(selectFilter);
+  const searchAndFilter: Filter = useSelector(selectFilter);
   const { search } = searchAndFilter;
   const filterTags = searchAndFilter.tags;
   const [searchText, setSearchText] = useState(search);
@@ -152,12 +128,44 @@ export default function SearchBox() {
     );
   };
 
+  const contentOfFilter = () => {
+    if (!searchAndFilter.filterOrSearch) {
+      return (
+        <Typography color="textSecondary">Search or filter ...</Typography>
+      );
+    }
+    if (searchAndFilter.search && searchAndFilter.search !== '') {
+      return (
+        <Typography color="secondary">{searchAndFilter.search}</Typography>
+      );
+    }
+    if (searchAndFilter.tags && searchAndFilter.tags.length > 0) {
+      return searchAndFilter.tags.map((tag: Tag) => (
+        <TagComponent
+          label={tag.name}
+          backgroundColor={tag.color}
+          textColor={tag.textColor}
+          key={tag.id}
+          className={classes.tagComponent}
+        />
+      ));
+    }
+    return <></>;
+  };
+
   return (
     <div className={classes.root}>
-      <IconButton onClick={toggleSearch} size="small" ref={searchRef}>
-        <Search fontSize="small" />
-      </IconButton>
-
+      <div className={classes.searchDisplay}>
+        <Tooltip title="Search and filter (Cmd/Control + G)" placement="top">
+          <IconButton onClick={toggleSearch} size="small" ref={searchRef}>
+            <Search
+              fontSize="small"
+              color={searchAndFilter.filterOrSearch ? 'secondary' : 'action'}
+            />
+          </IconButton>
+        </Tooltip>
+        <div style={{ paddingLeft: 20 }}>{contentOfFilter()}</div>
+      </div>
       <Popover
         open={searchPopoverOpen}
         onClose={onPopoverClose}
@@ -215,6 +223,12 @@ export default function SearchBox() {
                 }}
               />
             </form>
+          </div>
+          <div className={classes.searchSections}>
+            <Typography variant="caption" color="textSecondary">
+              Use Cmd/Ctrl + Shift + G keyboard shortcut to clear filter from
+              anywhere in the application.
+            </Typography>
           </div>
         </div>
       </Popover>

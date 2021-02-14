@@ -1,0 +1,30 @@
+.root {
+  margin-left: 10px;
+  margin-bottom: 7px;
+}
+
+.searchPopOver {
+  padding: 20px;
+  width: 700px;
+}
+
+.searchInput {
+  width: 100%;
+}
+
+.searchSections {
+  margin: 20px;
+}
+
+.tags {
+  margin-right: 5px;
+}
+
+.searchDisplay {
+  display: flex;
+  flex-direction: row;
+}
+
+.tagComponent {
+  margin-right: 10px;
+}

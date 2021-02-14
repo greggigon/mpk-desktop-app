@@ -1,10 +1,9 @@
 .column {
   width: 33%;
-  height: 90vh;
 }
 
 .columnsContainer {
-  margin: 10px;
+  margin: 10px 10px 0 10px;
 }
 
 .columnHeader {
@@ -14,7 +13,7 @@
 }
 
 .cardsContainer {
-  height: 100%;
+  height: calc(100vh - 100px);
   padding: 5px;
   border: 1px solid #616161;
   overflow-x: hidden;
@@ -26,10 +25,10 @@
 }
 
 ::-webkit-scrollbar {
-  width: .3em
+  width: 0.3em;
 }
 
-::-webkit-scrollbar-thumb:window-inactive,
-::-webkit-scrollbar-thumb {
-  background:  gray
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:window-inactive {
+  background: gray;
 }

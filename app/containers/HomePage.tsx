@@ -3,12 +3,12 @@ import Box from '@material-ui/core/Box';
 import Board from '../components/Board';
 import SideBar from '../components/SideBar';
 import styles from './HomePage.css';
+import SearchBox from '../components/SearchBox';
 
 export default function HomePage() {
   return (
-    <div>
+    <div className={styles.body}>
       <Box
-        className={styles.sideBar}
         border={1}
         borderLeft={0}
         borderBottom={0}
@@ -19,6 +19,9 @@ export default function HomePage() {
       </Box>
       <Box className={styles.content}>
         <Board />
+        <div className={styles.footer}>
+          <SearchBox />
+        </div>
       </Box>
     </div>
   );

@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
+      - name: Install rpm
+        run: |
+          brew install rpm
 
       - name: Publish releases
         env:
@@ -36,4 +39,4 @@ jobs:
           # This is used for uploading release assets to github
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn postinstall && yarn build && yarn electron-builder --publish always --mac
+          yarn postinstall && yarn build && yarn electron-builder --publish always --win --mac --linux

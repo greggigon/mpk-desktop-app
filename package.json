@@ -1,8 +1,8 @@
 {
   "name": "my-personal-kanban",
   "productName": "My Personal Kanban",
-  "version": "2.0.0-beta-1",
-  "description": "My Personal Kanban - Based on Electron Bolierplate",
+  "version": "2.0.0",
+  "description": "My Personal Kanban",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
@@ -21,7 +21,7 @@
     "package-mac": "yarn build && electron-builder build --mac",
     "package-linux": "yarn build && electron-builder build --linux",
     "package-win": "yarn build && electron-builder build --win --x64",
-    "postinstall": "node -r @babel/register internals/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn build-dll && opencollective-postinstall",
+    "postinstall": "node -r @babel/register internals/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn build-dll",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{js,jsx,json,html,css,less,scss,yml}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
     "preinstall": "node ./internals/scripts/CheckYarn.js",
@@ -35,7 +35,8 @@
     "test-e2e": "node -r @babel/register ./internals/scripts/CheckBuildsExist.js && cross-env NODE_ENV=test testcafe electron:./app ./test/e2e/Board.e2e.ts",
     "test-e2e-live": "node -r @babel/register ./internals/scripts/CheckBuildsExist.js && cross-env NODE_ENV=test testcafe --live electron:./app ./test/e2e/Board.e2e.ts",
     "test-watch": "yarn test --watch",
-    "github-build": "yarn lint && yarn build && yarn test "
+    "github-build": "yarn lint && yarn build && yarn test ",
+    "serve-www": "http-server release/ -p 8080"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -62,6 +63,11 @@
       "main.prod.js",
       "main.prod.js.map",
       "package.json"
+    ],
+    "publish": [
+      {
+        "provider": "github"
+      }
     ],
     "dmg": {
       "contents": [
@@ -94,43 +100,21 @@
     "directories": {
       "buildResources": "resources",
       "output": "release"
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate",
-      "private": false
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+    "url": "git+https://github.com/greggigon/mpk-desktop-app.git"
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "My Personal Kanban",
+    "url": "https://greggigon.com/my-personal-kanban-2-0/"
   },
   "contributors": [
-    {
-      "name": "Vikram Rangaraj",
-      "email": "vikr01@icloud.com",
-      "url": "https://github.com/vikr01"
-    },
-    {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
-    },
-    {
-      "name": "John Tran",
-      "email": "jptran318@gmail.com",
-      "url": "https://github.com/jooohhn"
-    }
   ],
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
+    "url": "https://github.com/greggigon/mpk-desktop-app/issues"
   },
   "keywords": [
     "electron",
@@ -144,7 +128,7 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/greggigon/mpk-desktop-app/blob/develop/README.md",
   "jest": {
     "testURL": "http://localhost/",
     "moduleNameMapper": {
@@ -270,7 +254,8 @@
     "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.0.9"
+    "webpack-merge": "^5.0.9",
+    "http-server": "^0.12.3"
   },
   "dependencies": {
     "@date-io/date-fns": "1.x",

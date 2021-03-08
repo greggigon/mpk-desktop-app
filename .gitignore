@@ -52,3 +52,4 @@ npm-debug.log.*
 # lock files
 package-lock.json
 app/package-lock.json
+yarn.lock

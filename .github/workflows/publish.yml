@@ -25,9 +25,6 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
-      - name: Install rpm
-        run: |
-          brew install rpm
 
       - name: Publish releases
         env:

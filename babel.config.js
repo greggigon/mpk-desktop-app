@@ -2,7 +2,7 @@
 
 const developmentEnvironments = ['development', 'test'];
 
-const developmentPlugins = [require('react-hot-loader/babel')];
+const developmentPlugins = [require('@babel/plugin-transform-runtime')];
 
 const productionPlugins = [
   require('babel-plugin-dev-expression'),
@@ -53,7 +53,7 @@ module.exports = (api) => {
       // Stage 3
       require('@babel/plugin-syntax-dynamic-import'),
       require('@babel/plugin-syntax-import-meta'),
-      [require('@babel/plugin-proposal-class-properties'), { loose: true }],
+      [require('@babel/plugin-proposal-class-properties'), { loose: false }],
       require('@babel/plugin-proposal-json-strings'),
 
       ...(development ? developmentPlugins : productionPlugins),

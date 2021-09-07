@@ -106,7 +106,7 @@ const createWindow = async () => {
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
-  updater(mainWindow);
+  updater();
 };
 
 /**

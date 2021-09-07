@@ -19,7 +19,7 @@ export default function TagsSwitch() {
   const theTagsValue = useSelector(showTagsSelector);
   const [showTagsOnCards, setShowTagsOnCards] = React.useState(theTagsValue);
 
-  const handleSwitch = (event) => {
+  const handleSwitch = () => {
     dispatch(updateShowTagsOnCards(!showTagsOnCards));
     setShowTagsOnCards(!showTagsOnCards);
   };

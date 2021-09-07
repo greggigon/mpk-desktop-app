@@ -1,3 +1,4 @@
+/* eslint react/jsx-props-no-spreading: off */
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -15,7 +16,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem } from '@material-ui/core';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Board } from '../../model/board';
 import { createBoard } from '../../features/board/boardSlice';
 import { isBlank } from '../../utils/stringUtils';

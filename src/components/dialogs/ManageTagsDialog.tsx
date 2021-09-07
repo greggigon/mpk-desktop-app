@@ -1,3 +1,4 @@
+/* eslint react/jsx-props-no-spreading: off */
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Dialog from '@material-ui/core/Dialog';

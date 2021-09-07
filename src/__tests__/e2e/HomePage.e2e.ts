@@ -1,4 +1,4 @@
-/* eslint jest/expect-expect: off, jest/no-test-callback: off */
+/* eslint jest/expect-expect: off, jest/no-done-callback: off */
 import { ClientFunction, Selector } from 'testcafe';
 
 const getPageUrl = ClientFunction(() => window.location.href);

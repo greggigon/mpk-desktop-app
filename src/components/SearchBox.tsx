@@ -1,3 +1,4 @@
+/* eslint react/jsx-props-no-spreading: off */
 import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {

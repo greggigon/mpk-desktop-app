@@ -49,10 +49,8 @@ export default function Board() {
 
   const [open, setOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(null);
-  const [
-    selectedCardAndAction,
-    setSelectedCardAndAction,
-  ] = useState<SelectedCardAndAction | null>(null);
+  const [selectedCardAndAction, setSelectedCardAndAction] =
+    useState<SelectedCardAndAction | null>(null);
 
   const handleOpen = (event) => {
     if (event.type === 'focus') {

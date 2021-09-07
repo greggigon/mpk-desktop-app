@@ -1,22 +1,21 @@
+/**
+ * @jest-environment jsdom
+ */
 /* eslint react/jsx-props-no-spreading: off, @typescript-eslint/ban-ts-comment: off */
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import { Provider } from 'react-redux';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { render, screen } from '@testing-library/react';
 import * as boardSlice from '../../features/board/boardSlice';
 import * as appSlice from '../../features/app/appSlice';
 import Card from '../../components/Card';
 import { createCard } from '../../model/cards';
 import { Tag } from '../../model/board';
-import TagComponent from '../../components/Tag';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const tagObjects: Array<Tag> = [
-  { name: 'Z', id: '1', color: '#aaa' },
-  { name: 'A', id: '2', color: '#bbb' },
+  { name: 'TAG Z', id: '1', color: '#aaa' },
+  { name: 'TAG A', id: '2', color: '#bbb' },
 ];
 const tags = tagObjects.map((tag) => tag.id);
 const tagsAsRecord: Record<string, Tag> = tagObjects.reduce((map, obj) => {
@@ -39,25 +38,19 @@ function setup(
     preloadedState,
   });
 
-  const getWrapper = () =>
-    mount(
-      <Provider store={store}>
-        <Card card={card} tags={tagsAsRecord} onCardSelected={() => {}} />
-      </Provider>
-    );
-  const component = getWrapper();
-  return {
-    store,
-    component,
-    tagsOnCard: component.find(TagComponent),
-  };
+  return render(
+    <Provider store={store}>
+      <Card card={card} tags={tagsAsRecord} onCardSelected={() => {}} />
+    </Provider>
+  );
 }
 
 describe('Card component', () => {
   it('should display tags on card in the alphabetical order', () => {
-    const { tagsOnCard } = setup();
-    expect(tagsOnCard).toHaveLength(2);
-    expect(tagsOnCard.at(0).prop('label')).toBe('A');
-    expect(tagsOnCard.at(1).prop('label')).toBe('Z');
+    setup();
+    const tagsOnCard = screen.getAllByText(/TAG/);
+    expect(tagsOnCard.length).toBe(2);
+    expect(tagsOnCard[0].textContent).toEqual('TAG A');
+    expect(tagsOnCard[1].textContent).toEqual('TAG Z');
   });
 });

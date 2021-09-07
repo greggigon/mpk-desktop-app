@@ -1,4 +1,4 @@
-/* eslint jest/expect-expect: off, jest/no-test-callback: off */
+/* eslint jest/expect-expect: off, jest/no-done-callback: off */
 import { ClientFunction, Selector } from 'testcafe';
 
 const getPageTitle = ClientFunction(() => document.title);
@@ -17,9 +17,10 @@ const selectFirstBoard = async (t) => {
   return boardTitle;
 };
 
-fixture`Board`.page('../../src/app.html').afterEach(assertNoConsoleErrors);
+fixture`Board`.page('../../app.html').afterEach(assertNoConsoleErrors);
 
 test('e2e', async (t) => {
   const boardTitle = await selectFirstBoard(t);
   await t.expect(getPageTitle()).eql(boardTitle);
+  expect(true).toBe(true);
 });

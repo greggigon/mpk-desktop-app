@@ -1,4 +1,3 @@
-import { Filter } from '@material-ui/icons';
 import { createSlice } from '@reduxjs/toolkit';
 import { Tag } from '../../model/board';
 
@@ -38,7 +37,7 @@ const searchAndFilterSlice = createSlice({
         state.search = '';
       }
     },
-    clearSearchAndFilter(state, action) {
+    clearSearchAndFilter(state) {
       state.filterOrSearch = false;
       state.tags = [];
       state.search = '';
@@ -46,10 +45,7 @@ const searchAndFilterSlice = createSlice({
   },
 });
 
-export const {
-  filterOnTags,
-  searchForText,
-  clearSearchAndFilter,
-} = searchAndFilterSlice.actions;
+export const { filterOnTags, searchForText, clearSearchAndFilter } =
+  searchAndFilterSlice.actions;
 
 export default searchAndFilterSlice.reducer;

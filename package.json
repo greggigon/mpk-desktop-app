@@ -15,6 +15,7 @@
     "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/BabelRegister ./src/main.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
     "test": "jest",
+    "test:watch": "jest --watch",
     "github-build": "yarn lint && yarn build && yarn test ",
     "serve-www": "http-server release/ -p 8080"
   },
@@ -124,7 +125,8 @@
     ],
     "setupFiles": [
       "./.erb/scripts/CheckBuildsExist.js"
-    ]
+    ],
+    "testPathIgnorePatterns": ["e2e", "testUtils"]
   },
   "devDependencies": {
     "@amilajack/testcafe-browser-provider-electron": "^0.0.15-alpha.1",

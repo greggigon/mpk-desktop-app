@@ -26,6 +26,7 @@ const loadedData = (appDataPath: string, isDevelopment = false) => {
     ? APP_SAVE_FOLDER_NAME_DEV
     : APP_SAVE_FOLDER_NAME;
   if (isDevelopment) {
+    /* eslint no-console: off */
     console.log('!!! DEVELOPMENT MODE !!! Using folder name', folderNameToUse);
   }
   const appSaveFolder = path.join(appDataPath, folderNameToUse);

@@ -27,13 +27,8 @@ const boardSlice = createSlice({
       moveCardFromColumnToColumn(board, source, destination);
     },
     addCard(state, action) {
-      const {
-        title,
-        description,
-        columnId,
-        addAtTheTop,
-        cardTags,
-      } = action.payload;
+      const { title, description, columnId, addAtTheTop, cardTags } =
+        action.payload;
       const board = state.byId[action.selectedBoard];
       const newCardNumber = board.cardsCounter + 1;
       addCardToBoard(
@@ -93,12 +88,8 @@ const boardSlice = createSlice({
     },
     updateColumn(state, action) {
       const board = state.byId[action.selectedBoard];
-      const {
-        columnId,
-        title,
-        isLimiting,
-        numberOfCardsLimit,
-      } = action.payload;
+      const { columnId, title, isLimiting, numberOfCardsLimit } =
+        action.payload;
       updateColumnDetails(
         board,
         columnId,
